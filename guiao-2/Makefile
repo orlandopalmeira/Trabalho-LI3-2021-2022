@@ -17,5 +17,8 @@ check_mem_g2:
 debug: 
 	gcc -g -O2 $(CFLAGS) $(FILES) -o guiao-2 -lm
 
+rm_output:
+	rm ./saida/*.txt
+
 clean:
 	rm guiao-2
