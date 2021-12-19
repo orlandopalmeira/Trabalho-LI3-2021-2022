@@ -1,6 +1,6 @@
 # Projeto LI3 - UMinho 2021/22
 
-[![EEUM-logo.png](https://i.postimg.cc/rFFkQHJN/EEUM-logo.png)](https://postimg.cc/BtykvMRj)
+[![EEUM-logo.png](https://i.postimg.cc/KvydHHDH/EEUM-logo.png)](https://postimg.cc/LhNCqv7t)
 
 
 ## Projeto elaborado por:
