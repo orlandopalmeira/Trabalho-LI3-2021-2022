@@ -14,11 +14,8 @@ check_mem_g2:
 	valgrind -s --leak-check=full ./guiao-2 commands.txt
 	rm guiao-2
 
-compile_g1:
-	gcc $(CFLAGS) $(FILES) -o guiao-1 -lm
-
 debug: 
-	gcc -g $(CFLAGS) $(FILES) -o main -lm
+	gcc -g -O2 $(CFLAGS) $(FILES) -o guiao-2 -lm
 
 clean:
-	rm main
+	rm guiao-2
