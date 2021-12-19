@@ -14,4 +14,4 @@ run_all:
 	./guiao-1 all
 
 clean:
-	@echo "Sem ficheiros para eliminar"
+	rm guiao-1
