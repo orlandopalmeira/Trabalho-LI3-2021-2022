@@ -232,13 +232,13 @@ int validLineRepos_Final(char *str, BSTreeINT usersTree, BSTreeINT reposWithComm
 // GUIAO 2
 
 int readArray(char *arrStr, unsigned int *arrInt){
-  int i = 0;
-  char *oldstr = arrStr++;
-  while(*arrStr != ']') {
+    int i = 0;
+    char *oldstr = arrStr++;
+    while(*arrStr != ']') {
     arrInt[i++] = strtol(arrStr,&arrStr,10); 
     if(*arrStr != ']') arrStr += 2;
-  }
-  return arrStr - oldstr;
+    }
+    return arrStr - oldstr;
 }
 
 /* USER: id;login;type;created_at;followers;followers_list;following;following_list;public_gists;public_repos */
@@ -274,26 +274,26 @@ void readUserLine(char *line, CatUsers *cusers, int *users, int *orgs, int *bots
 }
 
 void readCommitLine(char *line, CatUsers *cusers, int *collabs, int *commits, int *collabBots){
-  unsigned int repo_id, author_id, commiter_id, commit_at[3], msg_size; int cresceu = 1;
-  Commit new_commit = newCommit();
-  
-  repo_id = atoi(strsep(&line,";\n"));
-  author_id = atoi(strsep(&line,";\n"));
-  commiter_id = atoi(strsep(&line,";\n"));
-  sscanf(strsep(&line,";\n"),"%u-%u-%u",&commit_at[2],&commit_at[1],&commit_at[0]);
-  msg_size = strlen(strsep(&line,"\n\r\0"));
+    unsigned int repo_id, author_id, commiter_id, commit_at[3], msg_size; int cresceu = 1;
+    Commit new_commit = newCommit();
 
-  setCommit(&new_commit,repo_id,author_id,commiter_id,commit_at);
-  User found = searchUser(*cusers,author_id);      // encontramos o user
-  CatCommits comms = getCommitsWithUser(found);    // buscamos os commits dele
-  if(comms == NULL){ // Novo colaborador
-      (*collabs)++;
-      if(isCollabBot(*cusers,author_id)) (*collabBots)++;
-  }                // se encontrar um novo colaborador, incrementa o nº de colabs
-  setBiggestMsgSize(&found,msg_size);              // alteramos o tamanho da maior mensagem do commit
-  comms = insereCommit(comms,new_commit,&cresceu); // inserimos o commit nos commits do utilizador procurado
-  setCommits(&found,comms);   
-  (*commits)++;                     // atribuimos a nova arvore de commits ao utilizador
+    repo_id = atoi(strsep(&line,";\n"));
+    author_id = atoi(strsep(&line,";\n"));
+    commiter_id = atoi(strsep(&line,";\n"));
+    sscanf(strsep(&line,";\n"),"%u-%u-%u",&commit_at[2],&commit_at[1],&commit_at[0]);
+    msg_size = strlen(strsep(&line,"\n\r\0"));
+
+    setCommit(&new_commit,repo_id,author_id,commiter_id,commit_at);
+    User found = searchUser(*cusers,author_id);      // encontramos o user
+    CatCommits comms = getCommitsWithUser(found);    // buscamos os commits dele
+    if(comms == NULL){ // Novo colaborador
+        (*collabs)++;
+        if(isCollabBot(*cusers,author_id)) (*collabBots)++;
+    }                // se encontrar um novo colaborador, incrementa o nº de colabs
+    setBiggestMsgSize(&found,msg_size);              // alteramos o tamanho da maior mensagem do commit
+    comms = insereCommit(comms,new_commit,&cresceu); // inserimos o commit nos commits do utilizador procurado
+    setCommits(&found,comms);   
+    (*commits)++;                     // atribuimos a nova arvore de commits ao utilizador
 }
 
 // REPOS: id;owner_id;full_name;license;has_wiki;description;language;default_branch;created_at;updated_at;forks_count;open_issues;stargazers_count;size

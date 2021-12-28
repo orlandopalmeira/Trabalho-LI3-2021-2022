@@ -1,6 +1,5 @@
 #ifndef COMMITS_H
 #define COMMITS_H
-//#include "linkedLists.h"
 #include "repos.h"
 
 typedef struct commit *Commit;

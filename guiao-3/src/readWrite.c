@@ -104,5 +104,3 @@ int reposFinal(FILE *toRead, FILE *toWrite, BSTreeINT usersTree, BSTreeINT repos
     }
     return count;
 }
-
-// GUIAO 2
