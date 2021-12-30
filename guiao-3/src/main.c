@@ -228,6 +228,7 @@ void querie10(char *arguments, CatUsers cusers, int cmdIndex){
     fclose(output);
 }
 
+// FUNÇÃO DE EXECUÇÃO DO GUIÃO 3 
 void g2(char *filename){
     char commandsFPath[100];
     sprintf(commandsFPath,"./entrada/%s",filename);
@@ -279,6 +280,11 @@ void g2(char *filename){
     deleteCatUsers(usersCatalog);
     deleteCatRepos(reposCatalog);
     fclose(usersF); fclose(commitsF); fclose(reposF); fclose(commands);
+}
+
+// FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
+void g3(){
+    // code here ...
 }
 
 int main(int argc, char *argv[]){
