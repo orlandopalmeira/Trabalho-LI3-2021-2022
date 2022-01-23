@@ -209,7 +209,7 @@ void setCommits(User *usr, CatCommits comms){
 
 short isCollabBot(CatUsers cusers, unsigned int id){
 	User found = searchUser(cusers,id);
-	return found->commits != NULL && found->type == BOT;
+	return found != NULL && found->commits != NULL && found->type == BOT;
 }
 
 CatUsers leftBranch(CatUsers cusers){

@@ -13,7 +13,6 @@ int usersOK(FILE *toRead,FILE *toWrite){
         if(validLine_Users(buffer)){
             fputs(buffer,toWrite);
         }else{
-            //printf("%s",buffer); 
             count++;
         }
     }
@@ -28,7 +27,6 @@ int commitsOK(FILE *toRead,FILE *toWrite){
             fputs(buffer,toWrite); 
         }else {
             count++;
-            //printf("%s",buffer);
         }
     }
     return count;
@@ -42,7 +40,6 @@ int reposOK(FILE *toRead,FILE *toWrite){
             fputs(buffer,toWrite); 
         }else{
             count++;
-            //printf("%s",buffer);
         } i++;
     }
     return count;
@@ -51,7 +48,7 @@ int reposOK(FILE *toRead,FILE *toWrite){
 
 BSTreeINT usersIDsTree(){
     BSTreeINT tree = NULL;
-    FILE *usersok = fopen("./saida/users-ok.csv","r"); // fazer fclose
+    FILE *usersok = fopen("./entrada/users-ok.csv","r"); // fazer fclose
     char buffer[MB];
     unsigned int aux;
     fgets(buffer,MB,usersok);
@@ -65,7 +62,7 @@ BSTreeINT usersIDsTree(){
 
 BSTreeINT reposIDsTree(){
     BSTreeINT tree = NULL;
-    FILE *reposok = fopen("./saida/repos-ok.csv","r"); // fazer fclose
+    FILE *reposok = fopen("./entrada/repos-ok.csv","r"); // fazer fclose
     char buffer[MB];
     unsigned int aux;
     fgets(buffer,MB,reposok);
@@ -85,7 +82,6 @@ int commitsFinal(FILE *toRead, FILE *toWrite, BSTreeINT usersTree, BSTreeINT rep
             fputs(buffer,toWrite);
         }else {
             count++;
-            //printf("%s",buffer);
         }
     }
     return count;
@@ -99,7 +95,6 @@ int reposFinal(FILE *toRead, FILE *toWrite, BSTreeINT usersTree, BSTreeINT repos
             fputs(buffer,toWrite);
         }else{
             count++;
-            //printf("%s",buffer);
         }
     }
     return count;

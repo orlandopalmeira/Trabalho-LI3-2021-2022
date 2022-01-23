@@ -9,7 +9,7 @@ typedef struct nodeInt *BSTreeINT;
 /**
  * Insere um elemento numa árvore de procura se este não existir na árvore.
  */
-short insert(BSTreeINT *tree, int val);
+void insert(BSTreeINT *tree, int value);
 
 /**
  * Verifica se um dado elemento pertence a uma árvore de procura. 

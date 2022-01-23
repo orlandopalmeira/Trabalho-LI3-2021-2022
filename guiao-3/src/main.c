@@ -29,19 +29,15 @@ void g1_ex2(){
     BSTreeINT usersTree = usersIDsTree(), reposTree = reposIDsTree(), reposWithCommits = NULL; // libertar a memória no fim da função
     FILE *commitsok = fopen("./entrada/commits-ok.csv","r"), 
          *commitsfinal = fopen("./entrada/commits-final.csv","w"),
-         *usersok = fopen("./entrada/users-ok.csv","r"),
-         *usersfinal = fopen("./entrada/users-final.csv","w"),
          *reposok = fopen("./entrada/repos-ok.csv","r"),
          *reposfinal = fopen("./entrada/repos-final.csv","w");
-    char buffer[MB] = "\0";
-    fgets(buffer,MB,usersok); fputs(buffer,usersfinal);
-    while (fgets(buffer,MB,usersok)){
-        fputs(buffer,usersfinal);
-    }
+    //Exercicios guiao 2
     commitsFinal(commitsok,commitsfinal,usersTree,reposTree,&reposWithCommits);
     reposFinal(reposok,reposfinal,usersTree,reposWithCommits);
-    remove(usersok); remove(commitsok); remove(reposok);
-    fclose(usersok);fclose(usersfinal);
+    // fim dos exercicios do guiao 2
+
+    remove("./entrada/repos-ok.csv"); remove("./entrada/commits-ok.csv"); // remoção de ficheiros desnecessários
+    rename("./entrada/users-ok.csv","./entrada/users-final.csv"); // como os users nao sao alterados no exercicio 2, so precisamos de alterar o nome do ficheiro
     fclose(commitsok); fclose(commitsfinal);
     fclose(reposok); fclose(reposfinal);
     destroyBSTreeInt(usersTree); 
@@ -283,34 +279,43 @@ void g2(char *filename){
     fclose(usersF); fclose(commitsF); fclose(reposF); fclose(commands);
 }
 
+// GUIAO 3
+
+unsigned short menu(){
+    unsigned short opt;
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 1 | Quantidade de bots, organizações e utilizadores                        |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 2 | Número médio de colaboradores por repositório                          |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 3 | Número de repositórios contendo bots como colaboradores                |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 4 | Quantidade média de commits por utilizador?                            |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 5 | Top N users mais ativos num determinado intervalo de datas             |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 6 | Top N users com mais commits em repositórios de uma certa linguagem    |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 7 | Repositórios inativos a partir de uma determinada data                 |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 8 | Top N linguagens mais utilizadas a partir de uma determinada data      |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 9 | Top N users com mais commits em repositórios cujo owner é um amigo seu |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 10 | Top N users com as maiores mensagens de commit por repositório        |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("\nInsira opção:\n");
+    scanf("%hu",&opt);
+    return opt;
+}
+
 // FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
 void g3(){
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 1 | Quantidade de bots, organizações e utilizadores                                             |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 2 | Número médio de colaboradores por repositório                                               |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 3 | Número de repositórios contendo bots como colaboradores                                     |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 4 | Qual a quantidade média de commits por utilizador?                                          |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 5 | Qual o top N de utilizadores mais ativos num determinado intervalo de datas?                |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 6 | Qual o top N de utilizadores com mais commits em repositórios de uma determinada linguagem? |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 7 | Quais os repositórios inativos a partir de uma determinada data?                            |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 8 | Qual o top N de linguagens mais utilizadas a partir de uma determinada data?                |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 9 | Qual o top N de utilizadores com mais commits em repositórios cujo owner é um amigo seu?    |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
-    printf("| 10 | Qual o top N de utilizadores com as maiores mensagens de commit por repositório?           |\n");
-    printf("---------------------------------------------------------------------------------------------------\n");
     unsigned short opt;
     ins_option:{
-        printf("\nInsira opção:\n");
-        scanf("%hu",&opt);
+        opt = menu();
     }
+    g1_ex1(); g1_ex2(); // Validação de dados. (execução do guião 1)
     switch (opt){
         case 1:{
             printf("Querie 1\n");
@@ -358,7 +363,6 @@ void g3(){
             break;
         }
     }
-    printf("closing...\n");
 }
 
 int main(int argc, char *argv[]){
