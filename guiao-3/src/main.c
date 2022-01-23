@@ -10,12 +10,12 @@
 
 /* Função para executar o exercício 1 do guião 1.*/
 void g1_ex1(){
-    FILE *users = fopen("./entrada/users.csv","r"),
-         *usersok = fopen("./saida/users-ok.csv","w"),
-         *commits = fopen("./entrada/commits.csv","r"),
-         *commitsok = fopen("./saida/commits-ok.csv","w"),
-         *repos   = fopen("./entrada/repos.csv","r"), 
-         *reposok = fopen("./saida/repos-ok.csv","w");
+    FILE *users = fopen("./entrada/users-g3.csv","r"),
+         *usersok = fopen("./entrada/users-ok.csv","w"),
+         *commits = fopen("./entrada/commits-g3.csv","r"),
+         *commitsok = fopen("./entrada/commits-ok.csv","w"),
+         *repos   = fopen("./entrada/repos-g3.csv","r"), 
+         *reposok = fopen("./entrada/repos-ok.csv","w");
     usersOK(users,usersok); 
     commitsOK(commits,commitsok); 
     reposOK(repos,reposok); 
@@ -27,12 +27,12 @@ void g1_ex1(){
 /* Função para executar o exercício 2 do guião 1.*/
 void g1_ex2(){
     BSTreeINT usersTree = usersIDsTree(), reposTree = reposIDsTree(), reposWithCommits = NULL; // libertar a memória no fim da função
-    FILE *commitsok = fopen("./saida/commits-ok.csv","r"), 
-         *commitsfinal = fopen("./saida/commits-final.csv","w"),
-         *usersok = fopen("./saida/users-ok.csv","r"),
-         *usersfinal = fopen("./saida/users-final.csv","w"),
-         *reposok = fopen("./saida/repos-ok.csv","r"),
-         *reposfinal = fopen("./saida/repos-final.csv","w");
+    FILE *commitsok = fopen("./entrada/commits-ok.csv","r"), 
+         *commitsfinal = fopen("./entrada/commits-final.csv","w"),
+         *usersok = fopen("./entrada/users-ok.csv","r"),
+         *usersfinal = fopen("./entrada/users-final.csv","w"),
+         *reposok = fopen("./entrada/repos-ok.csv","r"),
+         *reposfinal = fopen("./entrada/repos-final.csv","w");
     char buffer[MB] = "\0";
     fgets(buffer,MB,usersok); fputs(buffer,usersfinal);
     while (fgets(buffer,MB,usersok)){
@@ -40,6 +40,7 @@ void g1_ex2(){
     }
     commitsFinal(commitsok,commitsfinal,usersTree,reposTree,&reposWithCommits);
     reposFinal(reposok,reposfinal,usersTree,reposWithCommits);
+    remove(usersok); remove(commitsok); remove(reposok);
     fclose(usersok);fclose(usersfinal);
     fclose(commitsok); fclose(commitsfinal);
     fclose(reposok); fclose(reposfinal);
@@ -228,7 +229,7 @@ void querie10(char *arguments, CatUsers cusers, int cmdIndex){
     fclose(output);
 }
 
-// FUNÇÃO DE EXECUÇÃO DO GUIÃO 3 
+// FUNÇÃO DE EXECUÇÃO DO GUIÃO 2
 void g2(char *filename){
     char commandsFPath[100];
     sprintf(commandsFPath,"./entrada/%s",filename);
@@ -284,11 +285,84 @@ void g2(char *filename){
 
 // FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
 void g3(){
-    // code here ...
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 1 | Quantidade de bots, organizações e utilizadores                                             |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 2 | Número médio de colaboradores por repositório                                               |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 3 | Número de repositórios contendo bots como colaboradores                                     |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 4 | Qual a quantidade média de commits por utilizador?                                          |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 5 | Qual o top N de utilizadores mais ativos num determinado intervalo de datas?                |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 6 | Qual o top N de utilizadores com mais commits em repositórios de uma determinada linguagem? |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 7 | Quais os repositórios inativos a partir de uma determinada data?                            |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 8 | Qual o top N de linguagens mais utilizadas a partir de uma determinada data?                |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 9 | Qual o top N de utilizadores com mais commits em repositórios cujo owner é um amigo seu?    |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    printf("| 10 | Qual o top N de utilizadores com as maiores mensagens de commit por repositório?           |\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
+    unsigned short opt;
+    ins_option:{
+        printf("\nInsira opção:\n");
+        scanf("%hu",&opt);
+    }
+    switch (opt){
+        case 1:{
+            printf("Querie 1\n");
+            break;
+        }
+        case 2:{
+            printf("Querie 2\n");
+            break;
+        }
+        case 3:{
+            printf("Querie 3\n");
+            break;
+        }
+        case 4:{
+            printf("Querie 4\n");
+            break;
+        }
+        case 5:{
+            printf("Querie 5\n");
+            break;
+        }
+        case 6:{
+            printf("Querie 6\n");
+            break;
+        }
+        case 7:{
+            printf("Querie 7\n");
+            break;
+        }
+        case 8:{
+            printf("Querie 8\n");
+            break;
+        }
+        case 9:{
+            printf("Querie 9\n");
+            break;
+        }
+        case 10:{
+            printf("Querie 10\n");
+            break;
+        }
+        default:{
+            printf("Opção inválida!\nTente novamente\n");
+            goto ins_option;
+            break;
+        }
+    }
+    printf("closing...\n");
 }
 
 int main(int argc, char *argv[]){
-    if(argc <= 1) printf("No arguments!\n");
+    if(argc <= 1) g3();
     else if(argc == 2) g2(argv[1]);
     return 0;
 } 

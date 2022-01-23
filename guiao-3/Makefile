@@ -6,16 +6,16 @@ compile_g3:
 
 execute_g3:
 	gcc -O2 $(CFLAGS) $(FILES) -o guiao-3 -lm
-	./guiao-2 commands.txt
+	./guiao-3 commands.txt
 	rm guiao-2
 
 check_mem_g3:
 	gcc -g -O2 $(CFLAGS) $(FILES) -o guiao-3 -lm
-	valgrind -s --leak-check=full ./guiao-2 commands.txt
+	valgrind -s --leak-check=full ./guiao-3 commands.txt
 	rm guiao-2
 
 debug: 
 	gcc -g -O2 $(CFLAGS) $(FILES) -o guiao-3 -lm
 
 clean:
-	rm guiao-2
+	rm guiao-3
