@@ -16,9 +16,9 @@ void g1_ex1(){
          *commitsok = fopen("./entrada/commits-ok.csv","w"),
          *repos   = fopen("./entrada/repos-g3.csv","r"), 
          *reposok = fopen("./entrada/repos-ok.csv","w");
-    usersOK(users,usersok); 
-    commitsOK(commits,commitsok); 
-    reposOK(repos,reposok); 
+    usersOK(users,usersok); printf("Users ok done!!!\n");
+    commitsOK(commits,commitsok); printf("Commits ok done!!!\n");
+    reposOK(repos,reposok); printf("Repos ok done!!!\n");
     fclose(users); fclose(usersok);
     fclose(commits); fclose(commitsok);
     fclose(repos); fclose(reposok);
@@ -33,11 +33,14 @@ void g1_ex2(){
          *reposfinal = fopen("./entrada/repos-final.csv","w");
     //Exercicios guiao 2
     commitsFinal(commitsok,commitsfinal,usersTree,reposTree,&reposWithCommits);
+    printf("Commits final done!!!\n");
     reposFinal(reposok,reposfinal,usersTree,reposWithCommits);
+    printf("Repos final done!!!\n");
     // fim dos exercicios do guiao 2
 
     remove("./entrada/repos-ok.csv"); remove("./entrada/commits-ok.csv"); // remoção de ficheiros desnecessários
     rename("./entrada/users-ok.csv","./entrada/users-final.csv"); // como os users nao sao alterados no exercicio 2, so precisamos de alterar o nome do ficheiro
+    printf("Users final done!!!\n");
     fclose(commitsok); fclose(commitsfinal);
     fclose(reposok); fclose(reposfinal);
     destroyBSTreeInt(usersTree); 
@@ -282,7 +285,6 @@ void g2(char *filename){
 // GUIAO 3
 
 unsigned short menu(){
-    unsigned short opt;
     printf("------------------------------------------------------------------------------\n");
     printf("| 1 | Quantidade de bots, organizações e utilizadores                        |\n");
     printf("------------------------------------------------------------------------------\n");
@@ -304,6 +306,7 @@ unsigned short menu(){
     printf("------------------------------------------------------------------------------\n");
     printf("| 10 | Top N users com as maiores mensagens de commit por repositório        |\n");
     printf("------------------------------------------------------------------------------\n");
+    unsigned short opt;
     printf("\nInsira opção:\n");
     scanf("%hu",&opt);
     return opt;
@@ -315,7 +318,8 @@ void g3(){
     ins_option:{
         opt = menu();
     }
-    g1_ex1(); g1_ex2(); // Validação de dados. (execução do guião 1)
+    g1_ex1(); 
+    g1_ex2();
     switch (opt){
         case 1:{
             printf("Querie 1\n");

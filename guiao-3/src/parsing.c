@@ -141,7 +141,7 @@ int validLine_Users(char *str){
 }
 
 int validLine_Commits(char *str){
-    int aux = positiveIntStr(str,';',NULL); // repo_id;
+  /*  int aux = positiveIntStr(str,';',NULL); // repo_id;
     if(!aux) return 0; 
     str += aux+1;
     aux = positiveIntStr(str,';',NULL); // author_id;
@@ -155,6 +155,19 @@ int validLine_Commits(char *str){
     str += 20;
     aux = validString(str,1,'\r',NULL); // message
     if(!aux) return 0;
+    return 1;*/
+    int aux;
+    aux = atoi(strsep(&str,";")); // repo_id
+    *(str-1) = ';';
+    if(aux <= 0) return 0;
+    aux = atoi(strsep(&str,";")); // author_id
+    *(str-1) = ';';
+    if(aux <= 0) return 0;
+    aux = atoi(strsep(&str,";")); // committer_id
+    *(str-1) = ';';
+    if(aux <= 0) return 0;
+    if (!validDateStr(strsep(&str,";"),0) && *(str-1) == 0) return 0; // commit_at
+    *(str-1) = ';';
     return 1;
 }
 

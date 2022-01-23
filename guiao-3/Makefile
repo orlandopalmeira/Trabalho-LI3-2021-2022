@@ -2,7 +2,7 @@ FILES = ./src/bstrees.c ./src/fileUtils.c ./src/repos.c ./src/commits.c ./src/us
 CFLAGS = -Wno-unused-result -ansi -Wall -Wextra -pedantic -std=gnu99 
 
 compile_g3:
-	gcc $(CFLAGS) $(FILES) -o guiao-3 -lm
+	gcc -O2 $(CFLAGS) $(FILES) -o guiao-3 -lm
 
 execute_g3:
 	gcc -O2 $(CFLAGS) $(FILES) -o guiao-3 -lm

@@ -45,16 +45,16 @@ BSTreeINT balanceLeft(BSTreeINT tree) {
 		tree = rotateRight(tree);
 		switch (tree->balance) {
 		case 0:
-			tree->left->balance=0;
-			tree->right->balance=0;
+			if(tree->left)tree->left->balance=0;
+			if(tree->right)tree->right->balance=0;
 			break;
 		case 1:
-			tree->left->balance=-1;
-			tree->right->balance=0;
+			if(tree->left)tree->left->balance=-1;
+			if(tree->right)tree->right->balance=0;
 			break;
 		case -1:
-			tree->left->balance=0;
-			tree->right->balance=1;
+			if(tree->left)tree->left->balance=0;
+			if(tree->right)tree->right->balance=1;
 		}
 		tree->balance=0;
 	}
@@ -74,16 +74,16 @@ BSTreeINT balanceRight(BSTreeINT tree) {
 		tree = rotateLeft(tree);
 		switch (tree->balance) {
 		case 0:
-			tree->left->balance=0;
-			tree->right->balance=0;
+			if(tree->left) tree->left->balance=0;
+			if(tree->right) tree->right->balance=0;
 			break;
 		case -1:
-			tree->left->balance=0;
-			tree->right->balance=1;
+			if(tree->left) tree->left->balance=0;
+			if(tree->right) tree->right->balance=1;
 			break;
 		case 1:
-			tree->left->balance=-1;
-			tree->right->balance=0;
+			if(tree->left) tree->left->balance=-1;
+			if(tree->right) tree->right->balance=0;
 		}
 		tree->balance=0;
 	}
