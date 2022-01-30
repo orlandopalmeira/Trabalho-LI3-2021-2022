@@ -54,3 +54,7 @@ short belongsToArrInt(unsigned int val, unsigned int *arr, int N){
     for(i = 0; i < N && arr[i] != val; i++) i = i;
     return i < N;
 }
+
+void jumpLine(FILE *file){
+    while(fgetc(file) != '\n');
+}

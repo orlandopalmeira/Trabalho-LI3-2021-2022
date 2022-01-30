@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef FILEUTILS_H
 #define FILEUTILS_H
 
@@ -16,5 +17,7 @@ int strcmpV2(char s1[], char s2[], char endchar);
 int strlenV2(char str[], char endchar);
 
 short belongsToArrInt(unsigned int val, unsigned int *arr, int N);
+
+void jumpLine(FILE *file);
 
 #endif

@@ -166,7 +166,10 @@ int validLine_Commits(char *str){
     aux = atoi(strsep(&str,";")); // committer_id
     *(str-1) = ';';
     if(aux <= 0) return 0;
-    if (!validDateStr(strsep(&str,";"),0) && *(str-1) == 0) return 0; // commit_at
+    if (!validDateStr(strsep(&str,";"),0)){ // commit_at
+        *(str-1) = ';';
+        return 0;
+    }
     *(str-1) = ';';
     return 1;
 }
@@ -248,8 +251,8 @@ int readArray(char *arrStr, unsigned int *arrInt){
     int i = 0;
     char *oldstr = arrStr++;
     while(*arrStr != ']') {
-    arrInt[i++] = strtol(arrStr,&arrStr,10); 
-    if(*arrStr != ']') arrStr += 2;
+        arrInt[i++] = strtol(arrStr,&arrStr,10); 
+        if(*arrStr != ']') arrStr += 2;
     }
     return arrStr - oldstr;
 }

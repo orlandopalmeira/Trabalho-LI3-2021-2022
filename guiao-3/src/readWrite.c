@@ -13,6 +13,7 @@ int usersOK(FILE *toRead,FILE *toWrite){
         if(validLine_Users(buffer)){
             fputs(buffer,toWrite);
         }else{
+            //printf("%s",buffer);
             count++;
         }
     }
@@ -26,6 +27,7 @@ int commitsOK(FILE *toRead,FILE *toWrite){
         if(validLine_Commits(buffer)){
             fputs(buffer,toWrite); 
         }else {
+            //printf("%s",buffer);
             count++;
         }
     }
@@ -39,6 +41,7 @@ int reposOK(FILE *toRead,FILE *toWrite){
         if(validLine_Repos(buffer)){
             fputs(buffer,toWrite); 
         }else{
+            //printf("%s",buffer);
             count++;
         } i++;
     }
@@ -81,6 +84,7 @@ int commitsFinal(FILE *toRead, FILE *toWrite, BSTreeINT usersTree, BSTreeINT rep
         if(validLineCommits_Final(buffer,usersTree,reposTree,reposWithCommits)){
             fputs(buffer,toWrite);
         }else {
+            //printf("%s",buffer);
             count++;
         }
     }
@@ -94,6 +98,7 @@ int reposFinal(FILE *toRead, FILE *toWrite, BSTreeINT usersTree, BSTreeINT repos
         if(validLineRepos_Final(buffer,usersTree,reposWithCommits)){
             fputs(buffer,toWrite);
         }else{
+            //printf("%s",buffer);
             count++;
         }
     }

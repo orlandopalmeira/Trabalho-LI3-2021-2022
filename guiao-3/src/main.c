@@ -16,9 +16,9 @@ void g1_ex1(){
          *commitsok = fopen("./entrada/commits-ok.csv","w"),
          *repos   = fopen("./entrada/repos-g3.csv","r"), 
          *reposok = fopen("./entrada/repos-ok.csv","w");
-    usersOK(users,usersok); printf("Users ok done!!!\n");
-    commitsOK(commits,commitsok); printf("Commits ok done!!!\n");
-    reposOK(repos,reposok); printf("Repos ok done!!!\n");
+    usersOK(users,usersok); //printf("Users ok done!!!\n");
+    commitsOK(commits,commitsok); //printf("Commits ok done!!!\n");
+    reposOK(repos,reposok); //printf("Repos ok done!!!\n");
     fclose(users); fclose(usersok);
     fclose(commits); fclose(commitsok);
     fclose(repos); fclose(reposok);
@@ -33,14 +33,14 @@ void g1_ex2(){
          *reposfinal = fopen("./entrada/repos-final.csv","w");
     //Exercicios guiao 2
     commitsFinal(commitsok,commitsfinal,usersTree,reposTree,&reposWithCommits);
-    printf("Commits final done!!!\n");
+    //printf("Commits final done!!!\n");
     reposFinal(reposok,reposfinal,usersTree,reposWithCommits);
-    printf("Repos final done!!!\n");
+    //printf("Repos final done!!!\n");
     // fim dos exercicios do guiao 2
 
     remove("./entrada/repos-ok.csv"); remove("./entrada/commits-ok.csv"); // remoção de ficheiros desnecessários
     rename("./entrada/users-ok.csv","./entrada/users-final.csv"); // como os users nao sao alterados no exercicio 2, so precisamos de alterar o nome do ficheiro
-    printf("Users final done!!!\n");
+    //printf("Users final done!!!\n");
     fclose(commitsok); fclose(commitsfinal);
     fclose(reposok); fclose(reposfinal);
     destroyBSTreeInt(usersTree); 
@@ -233,9 +233,9 @@ void g2(char *filename){
     char commandsFPath[100];
     sprintf(commandsFPath,"./entrada/%s",filename);
     FILE *commands = fopen(commandsFPath,"r"),
-         *usersF = fopen("./entrada/users-g2.csv","r"),
-         *commitsF = fopen("./entrada/commits-g2.csv","r"),
-         *reposF = fopen("./entrada/repos-g2.csv","r");
+         *usersF = fopen("./entrada/users-final.csv","r"),
+         *commitsF = fopen("./entrada/commits-final.csv","r"),
+         *reposF = fopen("./entrada/repos-final.csv","r");
     CatUsers usersCatalog = NULL;
     CatRepos reposCatalog = NULL;
     int users = 0, bots = 0, orgs = 0, repos = 0, colabs = 0, commits = 0, collabBots = 0,cmdIndex = 1, querieID;
@@ -284,6 +284,13 @@ void g2(char *filename){
 
 // GUIAO 3
 
+unsigned short get_option(){
+    unsigned short opt;
+    printf("\nInsira opção:\n");
+    scanf("%hu",&opt);
+    return opt;
+}
+
 unsigned short menu(){
     printf("------------------------------------------------------------------------------\n");
     printf("| 1 | Quantidade de bots, organizações e utilizadores                        |\n");
@@ -292,7 +299,7 @@ unsigned short menu(){
     printf("------------------------------------------------------------------------------\n");
     printf("| 3 | Número de repositórios contendo bots como colaboradores                |\n");
     printf("------------------------------------------------------------------------------\n");
-    printf("| 4 | Quantidade média de commits por utilizador?                            |\n");
+    printf("| 4 | Quantidade média de commits por utilizador                             |\n");
     printf("------------------------------------------------------------------------------\n");
     printf("| 5 | Top N users mais ativos num determinado intervalo de datas             |\n");
     printf("------------------------------------------------------------------------------\n");
@@ -306,67 +313,130 @@ unsigned short menu(){
     printf("------------------------------------------------------------------------------\n");
     printf("| 10 | Top N users com as maiores mensagens de commit por repositório        |\n");
     printf("------------------------------------------------------------------------------\n");
-    unsigned short opt;
-    printf("\nInsira opção:\n");
-    scanf("%hu",&opt);
-    return opt;
+    return get_option();
+}
+
+void querie1_g3(int users, int orgs, int bots){
+    printf("Bot: %d\nOrganization: %d\nUser: %d\n",bots,orgs,users);
+}
+
+void querie2_g3(int colabs, int repos){
+    printf("%.2lf\n",(float)colabs/repos);
+}
+
+void querie3_g3(int collabBots){
+    printf("%d\n",collabBots);
+}
+
+void querie4_g3(int commits, int users){
+    printf("%.2lf\n",(float)commits/users);
 }
 
 // FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
 void g3(){
-    unsigned short opt;
+    // Variables and catalogs
+    unsigned short opt = 0, validation = 0, build_catalogs = 0;
+    int users = 0, bots = 0, orgs = 0, repos = 0, colabs = 0, commits = 0, collabBots = 0;
+    char buffer[MB] = "\0";
+    CatUsers usersCatalog = NULL;
+    CatRepos reposCatalog = NULL;
+    FILE *usersF = fopen("./entrada/users-final.csv","r"),
+         *commitsF = fopen("./entrada/commits-final.csv","r"),
+         *reposF = fopen("./entrada/repos-final.csv","r");
+    // end of variables and catalogs
+    // interaction with user
     ins_option:{
         opt = menu();
+        goto continue_;
     }
-    g1_ex1(); 
-    g1_ex2();
+    temp:{
+        opt = get_option();
+    }
+    // end of interaction with user
+    continue_:
+    if(!validation){ // para evitar repetições de validação de dados
+        g1_ex1(); 
+        g1_ex2();
+        validation = 1;
+    }
+    if(!build_catalogs){ // para nao reconstruir os catálogos
+        jumpLine(usersF); 
+        while(fgets(buffer,MB,usersF)){ 
+            readUserLine(buffer,&usersCatalog,&users,&orgs,&bots);
+        }
+        jumpLine(commitsF);
+        while(fgets(buffer,MB,commitsF)){
+            readCommitLine(buffer,&usersCatalog,&colabs,&commits,&collabBots);
+        }
+        jumpLine(reposF);
+        while(fgets(buffer,MB,reposF)){
+            readRepoLine(buffer,&reposCatalog,&repos);
+        }
+        build_catalogs = 1;
+    }
     switch (opt){
         case 1:{
-            printf("Querie 1\n");
+            querie1_g3(users,orgs,bots);
+            goto temp;
             break;
         }
         case 2:{
-            printf("Querie 2\n");
+            querie2_g3(colabs,repos);
+            goto temp;
             break;
         }
         case 3:{
-            printf("Querie 3\n");
+            querie3_g3(collabBots);
+            goto temp;
             break;
         }
         case 4:{
-            printf("Querie 4\n");
+            querie4_g3(commits,users+orgs+bots);
+            goto temp;
             break;
         }
         case 5:{
             printf("Querie 5\n");
+            goto temp;
             break;
         }
         case 6:{
             printf("Querie 6\n");
+            goto temp;
             break;
         }
         case 7:{
             printf("Querie 7\n");
+            goto temp;
             break;
         }
         case 8:{
             printf("Querie 8\n");
+            goto temp;
             break;
         }
         case 9:{
             printf("Querie 9\n");
+            goto temp;
             break;
         }
         case 10:{
             printf("Querie 10\n");
+            goto temp;
+            break;
+        }
+        case 11:{
+            printf("A sair...\n");
             break;
         }
         default:{
             printf("Opção inválida!\nTente novamente\n");
-            goto ins_option;
+            goto temp;
             break;
         }
     }
+    fclose(usersF); fclose(commitsF); fclose(reposF);
+    deleteCatUsers(usersCatalog); deleteCatRepos(reposCatalog);
 }
 
 int main(int argc, char *argv[]){
