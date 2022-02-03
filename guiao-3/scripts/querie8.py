@@ -14,7 +14,7 @@ lang_dic = {} # formato {language: n_commits}
 for line in repos_lines:
     created_at = list(map(lambda x: int(x),line[8].split(' ')[0].split('-')))
     language = line[6]
-    if not(date_lower_arr(created_at,date)):
+    if not(date_lower_arr(created_at,date)) and language != "None":
         if language in lang_dic:
             lang_dic[language] += 1
         else: 
@@ -28,8 +28,6 @@ lang_list = sorted(lang_list, key = lambda x: x[1], reverse = True)
 while top_n > 0:
     if lang_list != []:
         (lang,_) = lang_list.pop(0)
-        if(lang == "None"):
-            continue
         expected_result.write(lang + "\n")
         top_n -= 1
     else:

@@ -284,14 +284,14 @@ void g2(char *filename){
 
 // GUIAO 3
 
-unsigned short get_option(){
-    unsigned short opt;
-    printf("\nInsira opção:\n");
-    scanf("%hu",&opt);
-    return opt;
+int get_option(){
+    char opt_s[32] = "\0";
+    printf("Insira opção:\n");
+    fgets(opt_s,31,stdin);
+    return atoi(opt_s);
 }
 
-unsigned short menu(){
+int menu(){
     printf("------------------------------------------------------------------------------\n");
     printf("| 1 | Quantidade de bots, organizações e utilizadores                        |\n");
     printf("------------------------------------------------------------------------------\n");
@@ -312,6 +312,8 @@ unsigned short menu(){
     printf("| 9 | Top N users com mais commits em repositórios cujo owner é um amigo seu |\n");
     printf("------------------------------------------------------------------------------\n");
     printf("| 10 | Top N users com as maiores mensagens de commit por repositório        |\n");
+    printf("------------------------------------------------------------------------------\n");
+    printf("| 11 | Sair                                                                  |\n");
     printf("------------------------------------------------------------------------------\n");
     return get_option();
 }
@@ -335,7 +337,7 @@ void querie4_g3(int commits, int users){
 // FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
 void g3(){
     // Variables and catalogs
-    unsigned short opt = 0, validation = 0, build_catalogs = 0;
+    int opt = 0, validation = 0, build_catalogs = 0;
     int users = 0, bots = 0, orgs = 0, repos = 0, colabs = 0, commits = 0, collabBots = 0;
     char buffer[MB] = "\0";
     CatUsers usersCatalog = NULL;
@@ -347,12 +349,13 @@ void g3(){
     // interaction with user
     ins_option:{
         opt = menu();
+        if(opt == 11) goto out; // sair do programa
         goto continue_;
     }
     temp:{
         opt = get_option();
     }
-    // end of interaction with user
+    
     continue_:
     if(!validation){ // para evitar repetições de validação de dados
         g1_ex1(); 
@@ -377,32 +380,122 @@ void g3(){
     switch (opt){
         case 1:{
             querie1_g3(users,orgs,bots);
-            goto temp;
+            printf("Pressione ENTER para voltar ao menu\n");
+            getchar();
+            goto ins_option;
             break;
         }
         case 2:{
             querie2_g3(colabs,repos);
-            goto temp;
+            printf("Pressione ENTER para voltar ao menu\n");
+            getchar();
+            goto ins_option;
             break;
         }
         case 3:{
             querie3_g3(collabBots);
-            goto temp;
+            printf("Pressione ENTER para voltar ao menu\n");
+            getchar();
+            goto ins_option;
             break;
         }
         case 4:{
             querie4_g3(commits,users+orgs+bots);
-            goto temp;
+            printf("Pressione ENTER para voltar ao menu\n");
+            getchar();
+            goto ins_option;
             break;
         }
         case 5:{
-            printf("Querie 5\n");
-            goto temp;
+            char buffer[32] = "\0"; // guarda os argumentos da querie 5
+            unsigned int top_n, date_i[3], date_f[3];
+            unsigned int page_index = 1; 
+            get_topN_q5:{
+                printf("Insira o número de utilizadores: ");
+                if(scanf("%u",&top_n) != 1){
+                    printf("Valor inválido, tente de novo!\n"); goto get_topN_q5;
+                }
+            }
+            get_date_i_q5:{
+                printf("Data de início (formato AAAA-MM-DD): ");
+                if(scanf("%u-%u-%u", &date_i[2],&date_i[1],&date_i[0]) != 3){
+                    printf("Valor inválido, tente de novo!\n"); goto get_date_i_q5;
+                }
+            }
+            get_date_f_q5:{
+                printf("Data de fim (formato AAAA-MM-DD): ");
+                if(scanf("%u-%u-%u", &date_f[2],&date_f[1],&date_f[0]) != 3){
+                    printf("Valor inválido, tente de novo!\n"); goto get_date_f_q5;
+                }
+            }
+            sprintf(buffer,"%u %u-%u-%u %u-%u-%u",top_n,date_i[2],date_i[1],date_i[0],date_f[2],date_f[1],date_f[0]);
+            querie5(buffer,usersCatalog,5); // execucao querie 5
+            FILE *result = fopen("./saida/command5_output.txt","r"); // output querie5
+            while(1){ // o ciclo é terminado conforme as opções do utilizador, não existe uma condição que o faça terminar
+                if(page_index > 0 && page_index <= num_of_pages(top_n)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("ID | LOGIN | Quantidade de commits\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,31,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q5;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q5:{
+                fclose(result);
+                goto ins_option;
+            }
             break;
         }
         case 6:{
-            printf("Querie 6\n");
-            goto temp;
+            char buffer[128], language[32];
+            unsigned int top_n, page_index = 1;
+            get_topN_q6:{
+                printf("Insira o número de utilizadores: ");
+                fgets(buffer,127,stdin); top_n = atoi(buffer);
+                if(top_n == 0){
+                    printf("Valor inválido, tente de novo!\n"); goto get_topN_q6;
+                }
+            }
+            printf("Insira a linguagem: ");
+            fgets(language,31,stdin);
+            sprintf(buffer,"%d %s",top_n,language);
+            querie6(buffer,usersCatalog,reposCatalog,6);
+            FILE *result = fopen("./saida/command6_output.txt","r");
+            while (1){
+                if(page_index > 0 && page_index <= num_of_pages(top_n)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("ID | LOGIN | Quantidade de commits\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,127,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q6;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q6:{
+                fclose(result);
+                goto ins_option;
+            }
             break;
         }
         case 7:{
@@ -425,18 +518,20 @@ void g3(){
             goto temp;
             break;
         }
-        case 11:{
-            printf("A sair...\n");
-            break;
-        }
+        case 11: break;
         default:{
             printf("Opção inválida!\nTente novamente\n");
             goto temp;
             break;
         }
     }
-    fclose(usersF); fclose(commitsF); fclose(reposF);
-    deleteCatUsers(usersCatalog); deleteCatRepos(reposCatalog);
+    out:{
+        printf("A sair...\n");
+        if(build_catalogs){
+            fclose(usersF); fclose(commitsF); fclose(reposF);
+            deleteCatUsers(usersCatalog); deleteCatRepos(reposCatalog);
+        }
+    }
 }
 
 int main(int argc, char *argv[]){

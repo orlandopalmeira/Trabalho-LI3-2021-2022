@@ -165,7 +165,6 @@ void deleteRepoList(RepoList list){
 }
 
 /* LANGUAGE LIST FUNCTIONS */
-
 LangList createLangList(int length){
     if(length <= 0) return NULL;
     else{
@@ -220,6 +219,7 @@ LangList searchLang(LangList list, char *language){
 }
 
 void insertLangList(LangList *list, char *lang){
+    if(strcmp(lang,"None\0") == 0) return;
     if(*list){
         LangList found = searchLang(*list,lang);
         if(found){
@@ -236,13 +236,6 @@ void insertLangList(LangList *list, char *lang){
         (*list)->language = strdup(lang);
         (*list)->value = 1;
         (*list)->next = NULL;
-    }
-}
-
-void testingFunc(LangList list){
-    if(list){
-        printf("%s;%d\n",list->language,list->value);
-        testingFunc(list->next);
     }
 }
 

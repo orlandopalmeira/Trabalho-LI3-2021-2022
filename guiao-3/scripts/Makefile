@@ -1,4 +1,5 @@
 all: querie1 querie2 querie3 querie4 querie5 querie6 querie7 querie8 querie9
+	rm -r __pycache__
 
 querie1:
 	python3 querie1.py

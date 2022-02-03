@@ -52,6 +52,4 @@ void querie8WriteFile(FILE *toWrite, LangList *list, int topN);
 
 void deleteLangList(LangList list);
 
-void testingFunc(LangList list);
-
 #endif

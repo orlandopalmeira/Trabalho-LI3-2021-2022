@@ -20,4 +20,12 @@ short belongsToArrInt(unsigned int val, unsigned int *arr, int N);
 
 void jumpLine(FILE *file);
 
+void jumpLines(FILE *file, unsigned int n_lines);
+
+unsigned int num_of_pages(int len);
+
+void printNLines(FILE *file, unsigned int n_lines);
+
+void print_page(FILE *file, unsigned int page_index);
+
 #endif

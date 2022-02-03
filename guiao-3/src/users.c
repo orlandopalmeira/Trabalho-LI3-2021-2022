@@ -261,15 +261,15 @@ unsigned int getNfollowing(User usr){
 }
 
 void deleteCatUsers(CatUsers catusers) {
-  if(catusers!=NULL) {
-    deleteCatUsers(catusers->left);
-    deleteCatUsers(catusers->right);
-    free(catusers->usr->followers_list);
-    free(catusers->usr->following_list);
-    free(catusers->usr->login);
-    deleteCatCommits(catusers->usr->commits);
-    free(catusers->usr);
-    catusers->balance=0;
-    free(catusers);
-  }
+	if(catusers!=NULL) {
+		deleteCatUsers(catusers->left);
+		deleteCatUsers(catusers->right);
+		free(catusers->usr->followers_list);
+		free(catusers->usr->following_list);
+		free(catusers->usr->login);
+		deleteCatCommits(catusers->usr->commits);
+		free(catusers->usr);
+		catusers->balance=0;
+		free(catusers);
+	}
 }

@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#define LINES_PER_PAGE 15
+#define MB 1048576
+
 short dateLower(unsigned int d1, unsigned int m1, unsigned int y1, unsigned int d2, unsigned int m2, unsigned int y2){
     // verifica d1/m1/y1 < d2/m2/l2
     if(y1 < y2) return 1;
@@ -55,6 +58,43 @@ short belongsToArrInt(unsigned int val, unsigned int *arr, int N){
     return i < N;
 }
 
+void replace(char *s, char old, char new){
+    while(*s != '\n' && *s){
+        if(*s == old) *s = new;
+        s++;
+    }
+}
+
 void jumpLine(FILE *file){
     while(fgetc(file) != '\n');
+}
+
+void jumpLines(FILE *file, unsigned int n_lines){
+    if(n_lines > 0){
+        jumpLine(file);
+        jumpLines(file,n_lines-1);
+    }
+}
+
+unsigned int num_of_pages(int len){
+    if(len % LINES_PER_PAGE == 0) return len / LINES_PER_PAGE;
+    else return (len / LINES_PER_PAGE) +1;
+}
+
+void printNLines(FILE *file, unsigned int n_lines){
+    char buffer[MB] = "\0",*aux = buffer;
+    unsigned int i;
+    for(i = 0; i < n_lines && aux; i++){
+        aux = fgets(buffer,MB-1,file);
+        if(aux){
+            replace(buffer,';','|');
+            printf("%s",buffer);
+        }
+    }
+    rewind(file);
+}
+
+void print_page(FILE *file, unsigned int page_index){
+    jumpLines(file,LINES_PER_PAGE*(page_index-1));
+    printNLines(file,LINES_PER_PAGE);
 }
