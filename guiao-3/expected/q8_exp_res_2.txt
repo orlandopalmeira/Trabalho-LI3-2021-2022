@@ -1,0 +1,260 @@
+JavaScript
+Java
+HTML
+Python
+C#
+PHP
+C++
+CSS
+C
+Ruby
+Shell
+Jupyter Notebook
+TypeScript
+Swift
+R
+Go
+Objective-C
+Matlab
+Arduino
+TeX
+Scala
+PowerShell
+Kotlin
+Lua
+Vue
+Makefile
+Vim script
+Visual Basic
+Perl
+Assembly
+Processing
+Rust
+ASP
+Haskell
+Pascal
+Batchfile
+Elixir
+Emacs Lisp
+Clojure
+Groovy
+VimL
+CMake
+CoffeeScript
+HCL
+Verilog
+VHDL
+Dart
+XSLT
+Mathematica
+PLSQL
+Julia
+Prolog
+Common Lisp
+Eagle
+F#
+PLpgSQL
+Roff
+Fortran
+AutoHotkey
+Cuda
+Erlang
+ActionScript
+Racket
+ApacheConf
+Nginx
+Elm
+NSIS
+SQLPL
+OCaml
+Tcl
+Puppet
+Scheme
+Yacc
+Apex
+GLSL
+GDScript
+Smarty
+SQF
+OpenSCAD
+ShaderLab
+KiCad
+Stata
+QML
+Groff
+D
+FORTRAN
+AutoIt
+SourcePawn
+Haxe
+SAS
+Logos
+Game Maker Language
+Max
+Crystal
+Smalltalk
+OpenEdge ABL
+PostScript
+SystemVerilog
+GCC Machine Description
+ColdFusion
+NetLogo
+API Blueprint
+Objective-C++
+LabVIEW
+FreeMarker
+AppleScript
+QMake
+SaltStack
+SuperCollider
+Ada
+Scilab
+DIGITAL Command Language
+AMPL
+Rebol
+Liquid
+Ren'Py
+DM
+Pure Data
+Lex
+PigLatin
+RAML
+Standard ML
+Web Ontology Language
+1C Enterprise
+PAWN
+PureScript
+Protocol Buffer
+Coq
+Vala
+PureBasic
+Nim
+ABAP
+UnrealScript
+Smali
+IDL
+Brainfuck
+Nix
+Gnuplot
+Awk
+Perl 6
+AGS Script
+GAP
+CLIPS
+Gherkin
+LilyPond
+BitBake
+Papyrus
+xBase
+COBOL
+M4
+RobotFramework
+Alloy
+Pony
+Perl6
+Idris
+ANTLR
+M
+Squirrel
+Mercury
+Stan
+Rascal
+nesC
+IGOR Pro
+LookML
+HLSL
+MAXScript
+POV-Ray SDL
+RPC
+Xtend
+Lean
+Turing
+RenderScript
+Io
+MQL5
+Xojo
+Cucumber
+Hack
+MQL4
+Forth
+Nimrod
+Nextflow
+Eiffel
+XQuery
+AngelScript
+LLVM
+BlitzBasic
+Slash
+Red
+Gosu
+Inform 7
+Bro
+Brightscript
+ChucK
+Modelica
+Uno
+Thrift
+E
+GAMS
+P4
+NCL
+Component Pascal
+WebAssembly
+Inno Setup
+LSL
+Ceylon
+Isabelle
+DTrace
+Mask
+GDB
+Cap'n Proto
+Clean
+Ox
+Objective-J
+JSONiq
+Chapel
+CWeb
+VCL
+Agda
+AspectJ
+MoonScript
+CartoCSS
+TLA
+ECL
+REXX
+Hy
+Nit
+NewLisp
+XC
+Pike
+Parrot
+Frege
+Propeller Spin
+Fantom
+X10
+Lasso
+Solidity
+NetLinx
+Nearley
+Modula-2
+Zephir
+Ragel
+SRecode Template
+Volt
+LiveScript
+Kit
+Glyph
+eC
+Metal
+Shen
+Grammatical Framework
+Ragel in Ruby Host
+HyPhy
+Common Workflow Language
+Meson
+PowerBuilder
+Genie
+Jasmin
+EmberScript
+SMT
+Cycript

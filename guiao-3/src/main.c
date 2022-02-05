@@ -130,15 +130,15 @@ void querie6(char *arguments, CatUsers cusers, CatRepos crepos, int cmdIndex){
     fclose(output);
 }
 
-void querie7Aux(CatUsers cusers, CatRepos crepos, RepoList *reposBuffer, unsigned int *date){
+void querie7Aux(CatUsers cusers, CatRepos crepos, RepoTree *reposBuffer, unsigned int *date){
     if(cusers){
         Repo associatedRepo = NULL;
         CatCommits usrcommits = getCommitsWithUser(getRoot(cusers));
         unsigned int *commit_at = getBiggestDate(usrcommits,crepos,&associatedRepo);
-        if(usrcommits && dateLower(commit_at[0],commit_at[1],commit_at[2],date[0],date[1],date[2])){
-            insertRepoList(reposBuffer,associatedRepo,1);
+        if(usrcommits && dateLower(commit_at[0],commit_at[1],commit_at[2],date[0],date[1],date[2])){ 
+            insertRepoTree(reposBuffer,associatedRepo,1);
         }else if(usrcommits){
-            insertRepoList(reposBuffer,associatedRepo,0);
+            insertRepoTree(reposBuffer,associatedRepo,0);
         }
         querie7Aux(leftBranch(cusers),crepos,reposBuffer,date);
         querie7Aux(rightBranch(cusers),crepos,reposBuffer,date);
@@ -151,11 +151,11 @@ unsigned int querie7(char *arguments,CatUsers cusers, CatRepos crepos, int cmdIn
     FILE *output = fopen(filePath,"w");
     unsigned int date[3], length = 0;
     sscanf(arguments,"%u-%u-%u",&date[2],&date[1],&date[0]);
-    RepoList reposBuffer = NULL;
+    RepoTree reposBuffer = NULL;
     querie7Aux(cusers,crepos,&reposBuffer,date);
     querie7WriteFile(output,reposBuffer);
-    length = lenRepoList(reposBuffer);
-    deleteRepoList(reposBuffer);
+    length = lenRepoTree(reposBuffer);
+    deleteRepoTree(reposBuffer);
     fclose(output);
     return length;
 }
@@ -384,15 +384,16 @@ void g3(int flag_tests){
         build_catalogs = 1;
     }
     if(flag_tests){ // execução dos testes
-        printf("agora...\n");
-        //test_querie_1(users,orgs,bots,querie1);
-        //test_querie_2(colabs,repos,querie2);
-        //test_querie_3(collabBots,querie3);
-        //test_querie_4(commits,users,querie4);
-        //test_querie_5(usersCatalog,querie5);
-        //test_querie_6(usersCatalog,reposCatalog,querie6);
-        //test_querie_8(reposCatalog,querie8);
+        test_querie_1(users,orgs,bots,querie1);
+        test_querie_2(colabs,repos,querie2);
+        test_querie_3(collabBots,querie3);
+        test_querie_4(commits,users,querie4);
+        test_querie_5(usersCatalog,querie5);
+        test_querie_6(usersCatalog,reposCatalog,querie6);
+        test_querie_7(usersCatalog,reposCatalog,querie7);
+        test_querie_8(reposCatalog,querie8);
         test_querie_9(usersCatalog,reposCatalog,querie9);
+        test_querie_10(usersCatalog,querie10);
         goto out;
     }
     switch (opt){
@@ -427,7 +428,7 @@ void g3(int flag_tests){
         case 5:{
             char buffer[32] = "\0"; // guarda os argumentos da querie 5
             unsigned int top_n, date_i[3], date_f[3];
-            unsigned int page_index = 1; 
+            int page_index = 1; 
             get_topN_q5:{
                 printf("Insira o número de utilizadores: ");
                 if(scanf("%u",&top_n) != 1){
@@ -450,13 +451,13 @@ void g3(int flag_tests){
             querie5(buffer,usersCatalog,5); // execucao querie 5
             FILE *result = fopen("./saida/command5_output.txt","r"); // output querie5
             while(1){ // o ciclo é terminado conforme as opções do utilizador, não existe uma condição que o faça terminar
+                if(page_index <= 0) page_index = num_of_pages(top_n);
+                else if(page_index > num_of_pages(top_n)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(top_n)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("ID | LOGIN | Quantidade de commits\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -477,7 +478,7 @@ void g3(int flag_tests){
         }
         case 6:{
             char buffer[128], language[32];
-            unsigned int top_n, page_index = 1;
+            unsigned int top_n;int page_index = 1;
             get_topN_q6:{
                 printf("Insira o número de utilizadores: ");
                 fgets(buffer,127,stdin); top_n = atoi(buffer);
@@ -491,13 +492,13 @@ void g3(int flag_tests){
             querie6(buffer,usersCatalog,reposCatalog,6);
             FILE *result = fopen("./saida/command6_output.txt","r");
             while (1){
+                if(page_index <= 0) page_index = num_of_pages(top_n);
+                else if(page_index > num_of_pages(top_n)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(top_n)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("ID | LOGIN | Quantidade de commits\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -518,7 +519,7 @@ void g3(int flag_tests){
         }
         case 7:{
             char buffer[128], *buff_addr = buffer;
-            unsigned int len = 0, page_index = 1;
+            unsigned int len = 0;int page_index = 1;
             get_date_q7:{
                 printf("Data (formato AAAA-MM-DD): ");
                 fgets(buffer,127,stdin);
@@ -531,13 +532,13 @@ void g3(int flag_tests){
             len = querie7(buffer,usersCatalog,reposCatalog,7);
             FILE *result = fopen("./saida/command7_output.txt","r");
             while(1){
+                if(page_index <= 0) page_index = num_of_pages(len);
+                else if(page_index > num_of_pages(len)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(len)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("REPO ID | DESCRIÇÃO\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(len));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(len));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -558,7 +559,7 @@ void g3(int flag_tests){
             break;
         }
         case 8:{
-            unsigned int top_n = 0, page_index = 1, date[3];
+            unsigned int top_n = 0, date[3]; int page_index = 1;
             char buffer[128], *buff_addr = buffer;
             get_topN_q8:{
                 printf("Insira o número de linguagens: ");
@@ -582,13 +583,13 @@ void g3(int flag_tests){
             querie8(buffer,reposCatalog,8);
             FILE *result = fopen("./saida/command8_output.txt","r");
             while (1){
+                if(page_index <= 0) page_index = num_of_pages(top_n);
+                else if(page_index > num_of_pages(top_n)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(top_n)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("LINGUAGEM\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -609,7 +610,7 @@ void g3(int flag_tests){
         }
         case 9:{
             char buffer[128];
-            unsigned int top_n = 0, page_index = 1;
+            unsigned int top_n = 0;int page_index = 1;
             get_topN_q9:{
                 printf("Insira o número de utilizadores: ");
                 fgets(buffer,127, stdin);
@@ -621,13 +622,13 @@ void g3(int flag_tests){
             querie9(buffer,usersCatalog,reposCatalog,9);
             FILE *result = fopen("./saida/command9_output.txt","r");
             while(1){
+                if(page_index <= 0) page_index = num_of_pages(top_n);
+                else if(page_index > num_of_pages(top_n)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(top_n)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("ID | LOGIN\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -648,7 +649,7 @@ void g3(int flag_tests){
         }
         case 10:{
             char buffer[128];
-            unsigned int top_n = 0, page_index = 1;
+            unsigned int top_n = 0; int page_index = 1;
             get_topN_q10:{
                 printf("Insira o número de utilizadores: ");
                 fgets(buffer,127, stdin);
@@ -660,13 +661,13 @@ void g3(int flag_tests){
             querie10(buffer,usersCatalog,10);
             FILE *result = fopen("./saida/command10_output.txt","r");
             while(1){
+                if(page_index <= 0) page_index = num_of_pages(top_n);
+                else if(page_index > num_of_pages(top_n)) page_index = 1;
                 if(page_index > 0 && page_index <= num_of_pages(top_n)){
                     printf("-----------------------------------------------------------------------\n");
                     printf("ID | LOGIN | TAMANHO DA MENSAGEM\n");
                     print_page(result,page_index);
                     printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
-                }else{
-                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
                 }
                 printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
                 printf("Insira opção:\n");
@@ -694,8 +695,8 @@ void g3(int flag_tests){
     }
     out:{
         printf("A sair...\n");
+        fclose(usersF); fclose(commitsF); fclose(reposF);
         if(build_catalogs){
-            fclose(usersF); fclose(commitsF); fclose(reposF);
             deleteCatUsers(usersCatalog); deleteCatRepos(reposCatalog);
         }
     }
@@ -703,13 +704,13 @@ void g3(int flag_tests){
 
 int main(int argc, char *argv[]){
     if(argc <= 1){
-        g3(1);/*
+        //g3(1);
         if(strstr(argv[0],"tests")){
             printf("Running tests...\n");
             g3(1);
             printf("Done!\n");
         }
-        else g3(0);*/
+        else g3(0);
     }
     else if(argc == 2) g2(argv[1]);
     return 0;

@@ -77,7 +77,7 @@ void jumpLines(FILE *file, unsigned int n_lines){
     }
 }
 
-unsigned int num_of_pages(int len){
+int num_of_pages(int len){
     if(len % LINES_PER_PAGE == 0) return len / LINES_PER_PAGE;
     else return (len / LINES_PER_PAGE) +1;
 }

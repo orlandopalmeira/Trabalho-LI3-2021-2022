@@ -8,6 +8,8 @@ typedef struct userList *UserList;
 
 typedef struct repoList *RepoList;
 
+typedef struct repoTree *RepoTree;
+
 typedef struct languageList *LangList;
 
 /* USERS LIST FUNCTIONS */
@@ -28,19 +30,15 @@ void querie10WriteFile(FILE *toWrite,UserList list);
 
 void deleteUserList(UserList list);
 
-/* REPOS LIST FUNCTIONS */
+/* REPOS TREE FUNCTIONS */
 
-RepoList createRepoList(int length);
+void insertRepoTree(RepoTree *repo_tree, Repo repo, char value);
 
-unsigned int lenRepoList(RepoList list);
+unsigned int lenRepoTree(RepoTree repo_tree);
 
-RepoList minimumRepoList(RepoList list);
+void deleteRepoTree(RepoTree repo_tree);
 
-void insertRepoList(RepoList *list, Repo commit, int value);
-
-void querie7WriteFile(FILE *output,RepoList list);
-
-void deleteRepoList(RepoList list);
+void querie7WriteFile(FILE* output, RepoTree repo_tree);
 
 /* LANGUAGE LIST FUNCTIONS */
 

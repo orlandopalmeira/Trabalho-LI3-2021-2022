@@ -22,7 +22,7 @@ void jumpLine(FILE *file);
 
 void jumpLines(FILE *file, unsigned int n_lines);
 
-unsigned int num_of_pages(int len);
+int num_of_pages(int len);
 
 void printNLines(FILE *file, unsigned int n_lines);
 

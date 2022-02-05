@@ -14,6 +14,8 @@
 #define Q8_ARGS2 "500 2016-01-01"
 #define Q9_ARGS1 "100"
 #define Q9_ARGS2 "10000"
+#define Q10_ARGS1 "150"
+#define Q10_ARGS2 "1500"
 
 void test_querie_1(int users, int orgs, int bots, void (*querie1)(int,int,int,int));
 
@@ -29,6 +31,10 @@ void test_querie_6(CatUsers cusers, CatRepos crepos, void (*querie6)(char*,CatUs
 
 void test_querie_8(CatRepos crepos, void (*querie8)(char*,CatRepos,int));
 
+void test_querie_7(CatUsers cusers, CatRepos crepos, unsigned int (*querie7)(char*,CatUsers,CatRepos,int));
+
 void test_querie_9(CatUsers cusers, CatRepos crepos,void (*querie9)(char*,CatUsers,CatRepos,int));
+
+void test_querie_10(CatUsers cusers, void (*querie10)(char*,CatUsers,int));
 
 #endif

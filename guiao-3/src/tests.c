@@ -2,7 +2,6 @@
 #include "fileUtils.h"
 #include <stdio.h>
 #include <time.h>
-#include <math.h>
 #include <string.h>
 
 /**
@@ -13,63 +12,6 @@ float hit_rate(FILE *my_result, FILE *expected_result){
     correct_lines = compare_files(my_result,expected_result,&tested_lines);
     return (float)correct_lines / tested_lines;
 }
-
-/**
- * Calcula a média de um array de floats
- */
-float average_f(float *values, unsigned int length){
-    float sum = 0;
-    unsigned int i;
-    for(i = 1; i <= length; i++){
-        sum += values[i-1];
-    }
-    return sum / i;
-}
-
-/**
- * Calcula a média de um array de doubles
-*/
-double average_d(double *values, unsigned int length){
-    double sum = 0;
-    unsigned int i;
-    for(i = 1; i <= length; i++){
-        sum += values[i-1];
-    }
-    return sum / i;
-}
-
-/**
- *  Calcula o desvio padrão de um array de floats.
- */
-float std_deviation_f(float *values, unsigned int length){
-    float sum = 0.0, mean, SD = 0.0;
-    unsigned int i;
-    for (i = 0; i < length; ++i) {
-        sum += values[i];
-    }
-    mean = sum / length;
-    for (i = 0; i < length; ++i) {
-        SD += pow(values[i] - mean, 2);
-    }
-    return sqrt(SD / (length-1));
-}
-
-/**
- *  Calcula o desvio padrão de um array de doubles.
- */
-double std_deviation_d(double *values, unsigned int length){
-    double sum = 0.0, mean, SD = 0.0;
-    unsigned int i;
-    for (i = 0; i < length; ++i) {
-        sum += values[i];
-    }
-    mean = sum / length;
-    for (i = 0; i < length; ++i) {
-        SD += pow(values[i] - mean, 2);
-    }
-    return sqrt(SD / (length-1));
-}
-
 
 /**
  * Efetua os testes à querie 1.
@@ -232,11 +174,38 @@ void test_querie_6(CatUsers cusers, CatRepos crepos, void (*querie6)(char*,CatUs
     printf("Tests querie6 done!\n");
 }
 
-/*
-void querie7(){
 
+void test_querie_7(CatUsers cusers, CatRepos crepos, unsigned int (*querie7)(char*,CatUsers,CatRepos,int)){
+    unsigned int i;
+    clock_t start, end;
+    FILE *q7_report = fopen("./reports/q7_report.csv","w"),
+         *expected_result_1 = fopen("./expected/q7_exp_res_1.txt","r"),
+         *expected_result_2 = fopen("./expected/q7_exp_res_2.txt","r");
+    fprintf(q7_report,"Command: %s\n",Q7_ARGS1);
+    fprintf(q7_report,"#Execution;Time taken;Hit rate\n");
+    for(i = 1; i <= 1; i++){
+        start = clock();
+        querie7(Q7_ARGS1,cusers,crepos,7);
+        end = clock();
+        FILE *result = fopen("./saida/command7_output.txt","r");
+        fprintf(q7_report,"%u;%lf;%f\n",i,(double)(end-start) / CLOCKS_PER_SEC,hit_rate(result,expected_result_1));
+        fclose(result);
+    }
+
+    fprintf(q7_report,"Command: %s\n",Q7_ARGS2);
+    fprintf(q7_report,"#Execution;Time taken;Hit rate\n");
+    for(i = 1; i <= 1; i++){
+        start = clock();
+        querie7(Q7_ARGS2,cusers,crepos,7);
+        end = clock();
+        FILE *result = fopen("./saida/command7_output.txt","r");
+        fprintf(q7_report,"%u;%lf;%f\n",i,(double)(end-start) / CLOCKS_PER_SEC,hit_rate(result,expected_result_2));
+        fclose(result);
+    }
+    fclose(q7_report); fclose(expected_result_1); fclose(expected_result_2);
+    printf("Tests querie7 done!\n");
 }
-*/
+
 
 void test_querie_8(CatRepos crepos, void (*querie8)(char*,CatRepos,int)){
     unsigned int i;
@@ -307,8 +276,33 @@ void test_querie_9(CatUsers cusers, CatRepos crepos,void (*querie9)(char*,CatUse
     printf("Tests querie9 done!\n");
 }
 
-/*
-void test_querie_10(...){
-    ...
+
+void test_querie_10(CatUsers cusers, void (*querie10)(char*,CatUsers,int)){
+    unsigned int i;
+    clock_t start, end;
+    FILE *q10_report = fopen("./reports/q10_report.csv","w");
+    fprintf(q10_report,"Command: %s\n",Q10_ARGS1);
+    fprintf(q10_report,"#Execution;Time taken;Hit rate\n");
+    for(i = 1; i <= NUMBER_OF_TESTS; i++){
+        start = clock();
+        querie10(Q10_ARGS1,cusers,10);
+        end = clock();
+        FILE *result = fopen("./saida/command10_output.txt","r");
+        fprintf(q10_report,"%u;%lf;%s\n",i,(double)(end-start) / CLOCKS_PER_SEC,"Unavailable");
+        fclose(result);
+    }
+
+    fprintf(q10_report,"\nCommand: %s\n",Q10_ARGS2);
+    fprintf(q10_report,"#Execution;Time taken;Hit rate\n");
+    for(i = 1; i <= NUMBER_OF_TESTS; i++){
+        start = clock();
+        querie10(Q10_ARGS2,cusers,10);
+        end = clock();
+        FILE *result = fopen("./saida/command10_output.txt","r");
+        fprintf(q10_report,"%u;%lf;%s\n",i,(double)(end-start) / CLOCKS_PER_SEC,"Unavailable");
+        fclose(result);
+    }
+
+    fclose(q10_report); 
 }
-*/
+

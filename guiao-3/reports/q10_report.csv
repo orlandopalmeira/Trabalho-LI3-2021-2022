@@ -1,0 +1,25 @@
+Command: 150
+#Execution;Time taken;Hit rate
+1;0.404563;Unavailable
+2;0.401028;Unavailable
+3;0.420608;Unavailable
+4;0.415376;Unavailable
+5;0.392980;Unavailable
+6;0.387400;Unavailable
+7;0.392822;Unavailable
+8;0.393535;Unavailable
+9;0.392916;Unavailable
+10;0.393223;Unavailable
+
+Command: 1500
+#Execution;Time taken;Hit rate
+1;0.980278;Unavailable
+2;1.001305;Unavailable
+3;1.014606;Unavailable
+4;1.041683;Unavailable
+5;1.194529;Unavailable
+6;1.265597;Unavailable
+7;1.532618;Unavailable
+8;1.689173;Unavailable
+9;1.746787;Unavailable
+10;1.985474;Unavailable

@@ -10,10 +10,19 @@ struct userList{
     struct userList *next;
 };
 
+struct repoTree{
+    unsigned int repo_id;
+    char value;
+    char *description;
+    char balance;
+    struct repoTree *left, *right;
+};
+
 struct repoList{
     unsigned int repo_id;
-    int value;
+    char value;
     char *description;
+    char balance;
     struct repoList *next;
 };
 
@@ -92,83 +101,183 @@ void deleteUserList(UserList list){
     }
 }
 
-/* REPOS LIST FUNCTIONS */
+/* REPOS TREE FUNCTIONS */
 
-RepoList createRepoList(int length){
-    if(length <= 0) return NULL;
-    else{
-        RepoList newList = malloc(sizeof(struct repoList));
-        newList->repo_id = -1;
-        newList->description = NULL;
-        newList->value = -1;
-        newList->next = createRepoList(length-1);
-        return newList;
+RepoTree rotateLeftRT(RepoTree repo_tree) {
+    RepoTree aux;
+    if(repo_tree!=NULL && repo_tree->right!=NULL) {
+        aux = repo_tree->right;
+        repo_tree->right = aux->left;
+        aux->left = repo_tree;
+        repo_tree = aux;
+    }
+    return repo_tree;
+}
+
+RepoTree rotateRightRT(RepoTree repo_tree) {
+    RepoTree aux;
+    if(repo_tree!=NULL && repo_tree->left!=NULL) {
+        aux = repo_tree->left;
+        repo_tree->left = aux->right;
+        aux->right = repo_tree;
+        repo_tree = aux;
+    }
+    return repo_tree;
+}
+
+RepoTree balanceLeftRT(RepoTree repo_tree) {
+    if(repo_tree->left->balance==-1) {
+        /* Rotacao simples a direita */
+        repo_tree = rotateRightRT(repo_tree);
+        repo_tree->balance=0;
+        repo_tree->right->balance=0;
+    }
+    else {
+    /* Dupla rotacao */
+        repo_tree->left=rotateLeftRT(repo_tree->left);
+        repo_tree = rotateRightRT(repo_tree);
+        switch (repo_tree->balance) {
+            case 0:
+            if(repo_tree->left) repo_tree->left->balance=0;
+            if(repo_tree->right) repo_tree->right->balance=0;
+            break;
+            case 1:
+            if(repo_tree->left)repo_tree->left->balance=-1;
+            if(repo_tree->right)repo_tree->right->balance=0;
+            break;
+            case -1:
+            if(repo_tree->left)repo_tree->left->balance=0;
+            if(repo_tree->right)repo_tree->right->balance=1;
+        }
+        repo_tree->balance=0;
+    }
+    return repo_tree;
+}
+
+RepoTree balanceRightRT(RepoTree repo_tree) {
+if(repo_tree->right->balance==1) {
+    /* Rotacao simples a esquerda */
+    repo_tree = rotateLeftRT(repo_tree);
+    repo_tree->balance=0;
+    repo_tree->left->balance=0;
+}
+else {
+    /* Dupla rotacao */
+    repo_tree->right = rotateRightRT(repo_tree->right);
+    repo_tree = rotateLeftRT(repo_tree);
+    switch (repo_tree->balance) {
+        case 0:
+            if(repo_tree->left)repo_tree->left->balance=0;
+            if(repo_tree->right)repo_tree->right->balance=0;
+            break;
+        case -1:
+            if(repo_tree->left)repo_tree->left->balance=0;
+            if(repo_tree->right)repo_tree->right->balance=1;
+            break;
+        case 1:
+            if(repo_tree->left)repo_tree->left->balance=-1;
+            if(repo_tree->right)repo_tree->right->balance=0;
+    }
+    repo_tree->balance=0;
+    }
+    return repo_tree;
+}
+RepoTree insereRepoTreeAux(RepoTree repo_tree, Repo repo, char value, int *cresceu);
+
+RepoTree insereLeftRT(RepoTree repo_tree, Repo rp, char value ,int *cresceu) {
+    repo_tree->left = insereRepoTreeAux(repo_tree->left,rp,value,cresceu);
+    if(*cresceu) {
+        switch (repo_tree->balance) {
+            case 1:
+                repo_tree->balance=0;
+                *cresceu=0;
+                break;
+            case 0:
+                repo_tree->balance=-1;
+                *cresceu=1;
+                break;
+            case -1:
+                repo_tree = balanceLeftRT(repo_tree);
+                *cresceu=0;
+        }
+    }
+    return repo_tree;
+}
+
+RepoTree insereRightRT(RepoTree repo_tree, Repo rp, char value ,int *cresceu) {
+    repo_tree->right = insereRepoTreeAux(repo_tree->right,rp,value,cresceu);
+    if(*cresceu) {
+        switch (repo_tree->balance) {
+            case -1:
+                repo_tree->balance=0;
+                *cresceu=0;
+                break;
+            case 0:
+                repo_tree->balance=1;
+                *cresceu=1;
+                break;
+            case 1:
+                repo_tree = balanceRightRT(repo_tree);
+                *cresceu=0;
+        }
+    }
+    return repo_tree;
+}
+
+RepoTree insereRepoTreeAux(RepoTree repo_tree, Repo repo, char value, int *cresceu){
+    if(repo_tree==NULL){
+        repo_tree = malloc(sizeof(struct repoTree));
+        repo_tree->repo_id = getRepoID(repo);
+        repo_tree->value = value;
+        repo_tree->description = strdup(getRepoDesc(repo));
+        repo_tree->balance = 0;
+        repo_tree->right=NULL;
+        repo_tree->left=NULL;
+        *cresceu=1;
+    }
+    else if(repo_tree->repo_id == getRepoID(repo) && repo_tree->value == 1 && value == 0){ 
+        repo_tree->value = value;
+        return repo_tree;
+    }
+    else if(getRepoID(repo) < repo_tree->repo_id) {
+        repo_tree = insereLeftRT(repo_tree,repo,value,cresceu);
+    }
+    else {
+        repo_tree = insereRightRT(repo_tree,repo,value,cresceu);
+    }
+    return(repo_tree);
+}
+
+void querie7WriteFile(FILE* output, RepoTree repo_tree){
+    if(repo_tree){
+        querie7WriteFile(output,repo_tree->left);
+        if(repo_tree->value != 0){
+            fprintf(output,"%d;%s\n",repo_tree->repo_id,repo_tree->description);
+        }
+        querie7WriteFile(output,repo_tree->right);
     }
 }
 
-unsigned int lenRepoList(RepoList list){
-    if(list){
-        return 1 + lenRepoList(list->next);
+void insertRepoTree(RepoTree *repo_tree, Repo repo, char value){
+    int cresceu = 1;
+    *repo_tree = insereRepoTreeAux(*repo_tree,repo,value,&cresceu);
+}
+
+unsigned int lenRepoTree(RepoTree repo_tree){
+    if(repo_tree){
+        if(repo_tree->value != 0) return 1 + lenRepoTree(repo_tree->left) + lenRepoTree(repo_tree->right);
+        else return lenRepoTree(repo_tree->left) + lenRepoTree(repo_tree->right);
     }else{
         return 0;
     }
 }
 
-RepoList minimumRepoList(RepoList list){
-    if(list != NULL){
-        RepoList curr, result = list;
-        for(curr = list->next; curr != NULL; curr = curr->next){
-            if(curr->value < result->value) result = curr;
-        }
-        return result;
-    }
-    return NULL;
-}
-
-RepoList searchRepoList(unsigned int repo_id, RepoList list){
-    if(list){
-        if(list->repo_id == repo_id) return list;
-        else return searchRepoList(repo_id,list->next);
-    }
-    return NULL;
-}
-
-void insertRepoList(RepoList *list, Repo repo, int value){
-    if(*list){
-        RepoList found = searchRepoList(getRepoID(repo),*list);
-        if(found){
-            if(found->value == 1 && value == 0) found->value = value;
-        }else{
-            RepoList newNode = malloc(sizeof(struct repoList));
-            newNode->repo_id = getRepoID(repo);
-            newNode->description = strdup(getRepoDesc(repo));
-            newNode->value = value;
-            newNode->next = *list;
-            *list = newNode;
-        }
-    }else{
-        (*list) = malloc(sizeof(struct repoList));
-        (*list)->repo_id = getRepoID(repo);
-        (*list)->description = strdup(getRepoDesc(repo));
-        (*list)->value = value;
-        (*list)->next = NULL;
-    }
-}
-
-void querie7WriteFile(FILE *output,RepoList list){
-    if(list){
-        if(list->value != 0){
-            fprintf(output,"%d;%s\n",list->repo_id,list->description);
-        }
-        querie7WriteFile(output,list->next);
-    }
-}
-
-void deleteRepoList(RepoList list){
-    if(list){
-        deleteRepoList(list->next);
-        free(list->description);
-        free(list);
+void deleteRepoTree(RepoTree repo_tree){
+    if(repo_tree){
+        deleteRepoTree(repo_tree->left);
+        deleteRepoTree(repo_tree->right);
+        free(repo_tree->description);
+        free(repo_tree);
     }
 }
 

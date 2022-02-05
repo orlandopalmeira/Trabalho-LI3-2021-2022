@@ -181,15 +181,15 @@ void setRepo(Repo *repo, unsigned int id, unsigned int owner_id, unsigned int *c
 }
 
 unsigned int getRepoID(Repo repo){
-    return repo->id;
+    return repo ? repo->id : 0;
 }
 
 char *getRepoDesc(Repo repo){
-    return repo->description;
+    return repo ? repo->description : NULL;
 }
 
 char *getRepoLang(Repo repo){
-    return repo->language;
+    return repo ? repo->language : NULL;
 }
 
 char *getRepoLangWithID(unsigned int id, CatRepos crepos){
@@ -203,24 +203,25 @@ char *getRepoLangWithID(unsigned int id, CatRepos crepos){
 }
 
 char *getRepoLangRoot(CatRepos crepos){
-    return crepos->repo->language;
+    return crepos ? crepos->repo->language : NULL;
 }
 
 unsigned int *repoCreatedAtRoot(CatRepos crepos){
-    return crepos->repo->created_at;
+    return crepos ? crepos->repo->created_at : NULL;
 }
 
 unsigned int getOwnerId(unsigned int repo_id,CatRepos crepos){
+    if(!crepos) return 0;
     Repo repo = searchRepo(repo_id,crepos);
 	return repo->owner_id;
 }
 
 CatRepos leftBranchRepos(CatRepos crepos){
-    return crepos->left;
+    return crepos ? crepos->left : NULL;
 }
 
 CatRepos rightBranchRepos(CatRepos crepos){
-    return crepos->right;
+    return crepos ? crepos->right : NULL;
 }
 
 void deleteCatRepos(CatRepos catrepos){
