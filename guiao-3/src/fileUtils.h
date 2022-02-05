@@ -28,4 +28,6 @@ void printNLines(FILE *file, unsigned int n_lines);
 
 void print_page(FILE *file, unsigned int page_index);
 
+unsigned int compare_files(FILE *to_test, FILE *to_compare, unsigned int *lines_tested);
+
 #endif

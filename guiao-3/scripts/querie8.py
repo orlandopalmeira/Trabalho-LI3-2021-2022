@@ -3,9 +3,10 @@ from my_utils import date_lower_arr
 
 top_n = int(sys.argv[1])
 date = list(map(lambda x: int(x),sys.argv[2].split('-'))) # YYYY-MM-DD
+filename = sys.argv[3]
 
 repos = open("../entrada/repos-final.csv", "r")
-expected_result = open("../expected/q8_exp_res.txt","w")
+expected_result = open("../expected/" + filename + ".txt","w")
 
 repos_lines = list(map(lambda x: x.split(';'),repos.readlines()))
 repos_lines.pop(0)

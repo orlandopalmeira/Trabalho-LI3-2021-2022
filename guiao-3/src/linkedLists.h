@@ -32,6 +32,8 @@ void deleteUserList(UserList list);
 
 RepoList createRepoList(int length);
 
+unsigned int lenRepoList(RepoList list);
+
 RepoList minimumRepoList(RepoList list);
 
 void insertRepoList(RepoList *list, Repo commit, int value);

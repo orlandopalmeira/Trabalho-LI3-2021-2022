@@ -1,6 +1,7 @@
 import sys
 
 top_n = int(sys.argv[1])
+filename = sys.argv[2]
 
 def strToArray(arraystr):
     return [] if arraystr == '[]' else list(map(lambda x: int(x),arraystr[1:len(arraystr)-1].split(',')))
@@ -8,7 +9,7 @@ def strToArray(arraystr):
 users = open("../entrada/users-final.csv", "r")
 repos = open("../entrada/repos-final.csv", "r")
 commits = open("../entrada/commits-final.csv", "r")
-expected_result = open("../expected/q9_exp_res.txt","w")
+expected_result = open("../expected/" + filename + ".txt","w")
 
 users_lines = list(map(lambda x: x.split(';'),users.readlines()))
 users_lines.pop(0)

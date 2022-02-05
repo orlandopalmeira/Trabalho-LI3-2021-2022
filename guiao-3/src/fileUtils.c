@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 
 #define LINES_PER_PAGE 15
 #define MB 1048576
@@ -97,4 +98,34 @@ void printNLines(FILE *file, unsigned int n_lines){
 void print_page(FILE *file, unsigned int page_index){
     jumpLines(file,LINES_PER_PAGE*(page_index-1));
     printNLines(file,LINES_PER_PAGE);
+}
+
+unsigned short line_belongs_to_file(char *line, FILE *file){
+    char buffer[MB] = "\0"; // para guardar as linhas do ficheiro
+    replace(line,'\r','\n'); // evitar a ocorrência de \r
+    while(fgets(buffer,MB-1,file)){ // leitura da linha do ficheiro
+        replace(buffer,'\r','\n'); // evitar a ocorrência de \r
+        if(!strcmp(line,buffer)){ // encontra a linha, então pára e retorna 1
+            rewind(file);
+            return 1;
+        }
+    }
+    rewind(file);
+    return 0;
+}
+
+/*
+Devolve o número de linhas que os ficheiros têm em comum
+*/
+unsigned int compare_files(FILE *to_test, FILE *to_compare, unsigned int *lines_tested){
+    unsigned int lines_in_both_files = 0, lines_tested_ = 0;
+    char buffer[MB] = "\0";
+    while(fgets(buffer,MB-1,to_test)){
+        if(line_belongs_to_file(buffer,to_compare)){
+            lines_in_both_files++;
+        }
+        lines_tested_++;
+    }
+    if(lines_tested) *lines_tested = lines_tested_;
+    return lines_in_both_files;
 }

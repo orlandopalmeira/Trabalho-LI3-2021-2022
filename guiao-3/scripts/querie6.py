@@ -1,12 +1,14 @@
 import sys
 
+top_n = int(sys.argv[1])
+language = sys.argv[2]
+filename = sys.argv[3]
+
 users = open("../entrada/users-final.csv", "r")
 repos = open("../entrada/repos-final.csv", "r")
 commits = open("../entrada/commits-final.csv", "r")
-expected_result = open("../expected/q6_exp_res.txt","w")
+expected_result = open("../expected/" + filename + ".txt", "w")
 
-top_n = int(sys.argv[1])
-language = sys.argv[2]
 
 users_lines = list(map(lambda x: x.split(';'),users.readlines()))
 users_lines.pop(0)

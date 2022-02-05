@@ -5,6 +5,7 @@
 #include "parsing.h"
 #include "linkedLists.h"
 #include "fileUtils.h"
+#include "tests.h"
 
 #define MB 1048576 // 1 MB para os arrays de caracteres
 
@@ -69,7 +70,7 @@ void querie3(int collabBots, int cmdIndex){
     char filePath[100];
     sprintf(filePath,"./saida/command%d_output.txt",cmdIndex);
     FILE *output = fopen(filePath,"w");
-    fprintf(output,"%d",collabBots);
+    fprintf(output,"%d\n",collabBots);
     fclose(output);
 } 
 
@@ -144,17 +145,19 @@ void querie7Aux(CatUsers cusers, CatRepos crepos, RepoList *reposBuffer, unsigne
     }
 }
 
-void querie7(char *arguments,CatUsers cusers, CatRepos crepos, int cmdIndex){
+unsigned int querie7(char *arguments,CatUsers cusers, CatRepos crepos, int cmdIndex){
     char filePath[100];
     sprintf(filePath,"./saida/command%d_output.txt",cmdIndex);
     FILE *output = fopen(filePath,"w");
-    unsigned int date[3];
+    unsigned int date[3], length = 0;
     sscanf(arguments,"%u-%u-%u",&date[2],&date[1],&date[0]);
     RepoList reposBuffer = NULL;
     querie7Aux(cusers,crepos,&reposBuffer,date);
     querie7WriteFile(output,reposBuffer);
+    length = lenRepoList(reposBuffer);
     deleteRepoList(reposBuffer);
     fclose(output);
+    return length;
 }
 
 void querie8Aux(CatRepos crepos, LangList *langBuffer, unsigned int *sinceDate){
@@ -335,7 +338,7 @@ void querie4_g3(int commits, int users){
 }
 
 // FUNÇÃO DE EXECUÇÃO DO GUIÃO 3
-void g3(){
+void g3(int flag_tests){
     // Variables and catalogs
     int opt = 0, validation = 0, build_catalogs = 0;
     int users = 0, bots = 0, orgs = 0, repos = 0, colabs = 0, commits = 0, collabBots = 0;
@@ -348,14 +351,17 @@ void g3(){
     // end of variables and catalogs
     // interaction with user
     ins_option:{
-        opt = menu();
-        if(opt == 11) goto out; // sair do programa
-        goto continue_;
+        if(!flag_tests){
+            opt = menu();
+            if(opt == 11) goto out; // sair do programa
+            goto continue_;
+        }
     }
     temp:{
-        opt = get_option();
+        if(!flag_tests){
+            opt = get_option();
+        }
     }
-    
     continue_:
     if(!validation){ // para evitar repetições de validação de dados
         g1_ex1(); 
@@ -376,6 +382,18 @@ void g3(){
             readRepoLine(buffer,&reposCatalog,&repos);
         }
         build_catalogs = 1;
+    }
+    if(flag_tests){ // execução dos testes
+        printf("agora...\n");
+        //test_querie_1(users,orgs,bots,querie1);
+        //test_querie_2(colabs,repos,querie2);
+        //test_querie_3(collabBots,querie3);
+        //test_querie_4(commits,users,querie4);
+        //test_querie_5(usersCatalog,querie5);
+        //test_querie_6(usersCatalog,reposCatalog,querie6);
+        //test_querie_8(reposCatalog,querie8);
+        test_querie_9(usersCatalog,reposCatalog,querie9);
+        goto out;
     }
     switch (opt){
         case 1:{
@@ -499,23 +517,172 @@ void g3(){
             break;
         }
         case 7:{
-            printf("Querie 7\n");
+            char buffer[128], *buff_addr = buffer;
+            unsigned int len = 0, page_index = 1;
+            get_date_q7:{
+                printf("Data (formato AAAA-MM-DD): ");
+                fgets(buffer,127,stdin);
+                if(atoi(strsep(&buff_addr,"-")) <= 0 || atoi(strsep(&buff_addr,"-")) <= 0 || atoi(strsep(&buff_addr,"-")) <= 0){
+                    printf("Data inválida, tente de novo\n"); goto get_date_q7;
+                }else{
+                    buffer[4] = buffer[7] = '-';
+                }
+            }
+            len = querie7(buffer,usersCatalog,reposCatalog,7);
+            FILE *result = fopen("./saida/command7_output.txt","r");
+            while(1){
+                if(page_index > 0 && page_index <= num_of_pages(len)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("REPO ID | DESCRIÇÃO\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(len));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(len));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,127,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q7;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q7:{
+                fclose(result);
+                goto ins_option;
+            }
             goto temp;
             break;
         }
         case 8:{
-            printf("Querie 8\n");
-            goto temp;
+            unsigned int top_n = 0, page_index = 1, date[3];
+            char buffer[128], *buff_addr = buffer;
+            get_topN_q8:{
+                printf("Insira o número de linguagens: ");
+                fgets(buffer, 127, stdin);
+                top_n = atoi(buffer);
+                if(top_n <= 0){
+                    printf("Valor inválido, tente de novo!\n"); goto get_topN_q8;
+                }
+            }
+            get_date_q8:{
+                printf("Data (formato AAAA-MM-DD): ");
+                fgets(buffer,127,stdin);
+                date[2] = atoi(strsep(&buff_addr,"-"));
+                date[1] = atoi(strsep(&buff_addr,"-"));
+                date[0] = atoi(strsep(&buff_addr,"-"));
+                if (date[0] <= 0 || date[1] <= 0 || date[2] <= 0){
+                    printf("Data com formato inválido, tente de novo\n"); goto get_date_q8;
+                }
+            }
+            sprintf(buffer,"%u %u-%u-%u",top_n,date[2],date[1],date[0]);
+            querie8(buffer,reposCatalog,8);
+            FILE *result = fopen("./saida/command8_output.txt","r");
+            while (1){
+                if(page_index > 0 && page_index <= num_of_pages(top_n)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("LINGUAGEM\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,127,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q8;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q8:{
+                fclose(result);
+                goto ins_option;
+            }
             break;
         }
         case 9:{
-            printf("Querie 9\n");
-            goto temp;
+            char buffer[128];
+            unsigned int top_n = 0, page_index = 1;
+            get_topN_q9:{
+                printf("Insira o número de utilizadores: ");
+                fgets(buffer,127, stdin);
+                top_n = atoi(buffer);
+                if(top_n <= 0){
+                    printf("Valor inválido, tente de novo!\n"); goto get_topN_q9;
+                }
+            }
+            querie9(buffer,usersCatalog,reposCatalog,9);
+            FILE *result = fopen("./saida/command9_output.txt","r");
+            while(1){
+                if(page_index > 0 && page_index <= num_of_pages(top_n)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("ID | LOGIN\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,127,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q9;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q9:{
+                fclose(result);
+                goto ins_option;
+            }
             break;
         }
         case 10:{
-            printf("Querie 10\n");
-            goto temp;
+            char buffer[128];
+            unsigned int top_n = 0, page_index = 1;
+            get_topN_q10:{
+                printf("Insira o número de utilizadores: ");
+                fgets(buffer,127, stdin);
+                top_n = atoi(buffer);
+                if(top_n <= 0){
+                    printf("Valor inválido, tente de novo!\n"); goto get_topN_q10;
+                }
+            }
+            querie10(buffer,usersCatalog,10);
+            FILE *result = fopen("./saida/command10_output.txt","r");
+            while(1){
+                if(page_index > 0 && page_index <= num_of_pages(top_n)){
+                    printf("-----------------------------------------------------------------------\n");
+                    printf("ID | LOGIN | TAMANHO DA MENSAGEM\n");
+                    print_page(result,page_index);
+                    printf("--------------------------- Página %d de %d ---------------------------\n",page_index,num_of_pages(top_n));
+                }else{
+                    printf("Índice de página inválido, inserir valores no intervalo [1,%d]\n",num_of_pages(top_n));
+                }
+                printf("P        -> Próxima página\nA        -> Página anterior\nS <n>    -> Saltar para a página n\nM        -> Voltar ao menu principal\n");
+                printf("Insira opção:\n");
+                fgets(buffer,127,stdin);
+                switch(buffer[0]){
+                    case 'P': page_index++; break;
+                    case 'A': page_index--; break;
+                    case 'M': goto out_q10;
+                    case 'S': page_index = atoi(buffer+1); break;
+                    default: continue; break;
+                }
+            }
+            out_q10:{
+                fclose(result);
+                goto ins_option;
+            }
             break;
         }
         case 11: break;
@@ -535,7 +702,15 @@ void g3(){
 }
 
 int main(int argc, char *argv[]){
-    if(argc <= 1) g3();
+    if(argc <= 1){
+        g3(1);/*
+        if(strstr(argv[0],"tests")){
+            printf("Running tests...\n");
+            g3(1);
+            printf("Done!\n");
+        }
+        else g3(0);*/
+    }
     else if(argc == 2) g2(argv[1]);
     return 0;
 } 

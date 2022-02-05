@@ -3,10 +3,11 @@ from my_utils import date_between_arr
 top_n = int(sys.argv[1])
 date1 = list(map(lambda x: int(x),sys.argv[2].split('-')))
 date2 = list(map(lambda x: int(x),sys.argv[3].split('-')))
+filename = sys.argv[4]
 
 commits = open("../entrada/commits-final.csv", "r")
 users = open("../entrada/users-final.csv", "r")
-expected_result = open("../expected/q5_exp_res.txt","w")
+expected_result = open("../expected/" + filename + ".txt","w")
 
 commits_lines = list(map(lambda x: x.split(';'),commits.readlines()))
 commits_lines.pop(0) # ignorar a 1.ª Linha

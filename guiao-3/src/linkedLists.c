@@ -106,6 +106,14 @@ RepoList createRepoList(int length){
     }
 }
 
+unsigned int lenRepoList(RepoList list){
+    if(list){
+        return 1 + lenRepoList(list->next);
+    }else{
+        return 0;
+    }
+}
+
 RepoList minimumRepoList(RepoList list){
     if(list != NULL){
         RepoList curr, result = list;
@@ -188,7 +196,7 @@ LangList minimumLangList(LangList list){
 }
 
 LangList maximumLangList(LangList *list){
-    if(list != NULL){
+    if(list != NULL && *list != NULL){
         LangList antCurr = *list, antRes = NULL, curr, result = *list;
         for(curr = (*list)->next; curr != NULL; curr = curr->next){
             if(curr->value > result->value){
@@ -242,6 +250,7 @@ void insertLangList(LangList *list, char *lang){
 void querie8WriteFile(FILE *toWrite, LangList *list, int topN){
     if(topN > 0){
         LangList max = maximumLangList(list);
+        if(!max) return;
         if(strcmp(max->language,"None\0") != 0){
             fprintf(toWrite,"%s\n",max->language);
             free(max->language); free(max);

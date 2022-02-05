@@ -1,0 +1,1 @@
+# Ficheiros com os resultados dos testes das queries gerados pelo executável 'tests'

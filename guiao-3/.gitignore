@@ -1,3 +1,5 @@
 .vscode
 entrada/*.csv
 guiao-3
+saida/*.txt
+expected/*.txt
