@@ -183,7 +183,7 @@ void test_querie_7(CatUsers cusers, CatRepos crepos, unsigned int (*querie7)(cha
          *expected_result_2 = fopen("./expected/q7_exp_res_2.txt","r");
     fprintf(q7_report,"Command: %s\n",Q7_ARGS1);
     fprintf(q7_report,"#Execution;Time taken;Hit rate\n");
-    for(i = 1; i <= 1; i++){
+    for(i = 1; i <= NUMBER_OF_TESTS; i++){
         start = clock();
         querie7(Q7_ARGS1,cusers,crepos,7);
         end = clock();
@@ -194,7 +194,7 @@ void test_querie_7(CatUsers cusers, CatRepos crepos, unsigned int (*querie7)(cha
 
     fprintf(q7_report,"Command: %s\n",Q7_ARGS2);
     fprintf(q7_report,"#Execution;Time taken;Hit rate\n");
-    for(i = 1; i <= 1; i++){
+    for(i = 1; i <= NUMBER_OF_TESTS; i++){
         start = clock();
         querie7(Q7_ARGS2,cusers,crepos,7);
         end = clock();

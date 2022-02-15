@@ -384,16 +384,16 @@ void g3(int flag_tests){
         build_catalogs = 1;
     }
     if(flag_tests){ // execução dos testes
-        test_querie_1(users,orgs,bots,querie1);
-        test_querie_2(colabs,repos,querie2);
-        test_querie_3(collabBots,querie3);
-        test_querie_4(commits,users,querie4);
-        test_querie_5(usersCatalog,querie5);
-        test_querie_6(usersCatalog,reposCatalog,querie6);
+        //test_querie_1(users,orgs,bots,querie1);
+        //test_querie_2(colabs,repos,querie2);
+        //test_querie_3(collabBots,querie3);
+        //test_querie_4(commits,users,querie4);
+        //test_querie_5(usersCatalog,querie5);
+        //test_querie_6(usersCatalog,reposCatalog,querie6);
         test_querie_7(usersCatalog,reposCatalog,querie7);
-        test_querie_8(reposCatalog,querie8);
-        test_querie_9(usersCatalog,reposCatalog,querie9);
-        test_querie_10(usersCatalog,querie10);
+        //test_querie_8(reposCatalog,querie8);
+        //test_querie_9(usersCatalog,reposCatalog,querie9);
+        //test_querie_10(usersCatalog,querie10);
         goto out;
     }
     switch (opt){
