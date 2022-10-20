@@ -1,7 +1,6 @@
 # Projeto LI3 - UMinho 2021/22
 
-[![EEUM-logo.png](https://i.postimg.cc/50hZ17dj/EEUM-logo.png)](https://postimg.cc/N9xNkx0w)
-
+<img src='https://i.postimg.cc/hjkbcqPN/EEUM-logo.png' width="30%"/>
 
 ## Projeto elaborado por:
 - Orlando José da Cunha Palmeira A97755
