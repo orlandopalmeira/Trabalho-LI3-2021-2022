@@ -1,46 +1,19 @@
-# Projeto LI3 - UMinho 2021/22
-
 <img src='https://i.postimg.cc/hjkbcqPN/EEUM-logo.png' width="30%"/>
 
-## Projeto elaborado por:
-- Orlando José da Cunha Palmeira A97755
+<h3 align="center">Licenciatura em Engenharia Informática <br> Trabalho prático de Laboratórios de Informática III <br> 2021/2022 </h3>
 
-<br>
+---
+<h3 align="center"> Colaboradores &#129309 </h2>
 
-## Comandos principais da makefile do Guião #1
-Este comando gera o ficheiro executável.
-```
-$ make compile_g1
-```
-Este comando executa o exercício 1.
-```
-$ make run_g1_e1
-```
-Este comando executa o exercício 2.
-```
-$ make run_g1_e2
-```
-Este comando executa os dois exercícios (executa o ex.2 após o ex.1).
-```
-$ make run_all
-```
-Este comando elimina ficheiros desnecessários.
-```
-$ make clean
-```
+<div align="center">
 
-<br>
+| Nome                           | Número |
+|--------------------------------|--------|
+| Orlando José da Cunha Palmeira | A97755 |
 
-## Comandos principais da makefile do Guião #2
-Este comando gera o ficheiro executável.
-```
-$ make compile_g2
-```
-Este comando corre o ficheiro executável no valgrind para prevenção de erros no uso da memória.
-```
-$ make check_mem_g2
-```
-Este comando elimina ficheiros desnecessários.
-```
-$ make clean
-```
+</div>
+
+### Nota: 15 / 20
+
+<h3><i>Keywords</i></h3>
+LI3, Laboratórios de Informática III, Laboratórios de Informática III, universidade do minho, uminho, miei, lei, engenharia informatica
