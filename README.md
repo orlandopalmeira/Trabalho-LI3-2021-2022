@@ -16,4 +16,4 @@
 ### Nota: 15 / 20
 
 <h3><i>Keywords</i></h3>
-LI3, Laboratórios de Informática III, Laboratórios de Informática III, universidade do minho, uminho, miei, lei, engenharia informatica
+LI3, Laboratórios de Informática III, laboratórios de informática, universidade do minho, uminho, miei, lei, engenharia informatica
